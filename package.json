@@ -1,5 +1,5 @@
 {
-    "name": "wp-react.cot",
+    "name": "react-server-start-kit",
     "version": "1.0.0",
     "description": "",
     "main": "server.js",
@@ -79,6 +79,7 @@
         "webpack-cli": "^3.2.3"
     },
     "dependencies": {
+        "connected-react-router": "^6.4.0",
         "final-form": "^4.11.1",
         "formidable": "^1.2.1",
         "history": "^4.7.2",
@@ -96,9 +97,8 @@
         "react": "^16.8.3",
         "react-dom": "^16.8.3",
         "react-final-form": "^4.0.2",
-        "react-redux": "^5.1.0",
+        "react-redux": "^6.0.0",
         "react-router-dom": "^4.3.1",
-        "react-router-redux": "^5.0.0-alpha.9",
         "redux": "^4.0.1",
         "redux-thunk": "^2.3.0",
         "validator": "^10.11.0"

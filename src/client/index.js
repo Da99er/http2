@@ -9,10 +9,7 @@ import thunk from 'redux-thunk';
 import { createBrowserHistory, createMemoryHistory } from 'history';
 import { Route, Switch, StaticRouter } from 'react-router-dom';
 
-import {
-    ConnectedRouter,
-    routerMiddleware,
-} from 'react-router-redux';
+import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
 
 import rootReducer from 'shared/reducers/init';
 import routes from 'shared/routes';
@@ -21,11 +18,11 @@ const siteRender = (initalState, requestUrl) => {
 
     const history = window.IS_SERVER ? createMemoryHistory() : createBrowserHistory();
     // Build the middleware for intercepting and dispatching navigation actions
-    const middleware = routerMiddleware(history);
+    const middlewareOfHistory = routerMiddleware(history);
     // Add the reducer to your store on the `router` key
     // Also apply our middleware for navigating
 
-    const middlewares = [middleware, thunk];
+    const middlewares = [middlewareOfHistory, thunk];
 
     if (MODE === 'development') { // eslint-disable-line no-undef
 
@@ -34,7 +31,7 @@ const siteRender = (initalState, requestUrl) => {
     }
 
     const store = createStore(
-        rootReducer,
+        rootReducer(history),
         initalState,
         applyMiddleware(...middlewares),
     );
