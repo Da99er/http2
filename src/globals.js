@@ -23,6 +23,7 @@ module.exports = {
     PATH_TO_SCREENS: `${ROOTDIR}/client/screens`,
     PATH_TO_TEMPLATES: `${ROOTDIR}/client/shared/templates`,
     PATH_TO_MIDDLEWARES: `${ROOTDIR}/middlewares`,
+    PATH_TO_SITE: `/var/www/${DOMAIN_NAME}`,
     PATH_TO_BUNDLE: `/var/www/${DOMAIN_NAME}/public`,
     PATH_TO_PUBLIC: '/public/',
     PATH_TO_UPLOADS: '/uploads',

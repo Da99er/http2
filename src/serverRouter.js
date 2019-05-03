@@ -21,6 +21,7 @@ const {
     },
     DOMAIN_NAME,
     PATH_TO_MIDDLEWARES,
+    PATH_TO_SITE,
     PATH_TO_BUNDLE,
     PATH_TO_TEMPLATES,
     PATH_TO_SHARED,
@@ -189,7 +190,7 @@ module.exports = () => (request, response) => {
 
         } else if (reqType !== 'application/octet-stream') {
 
-            request = getFile(response, path.join(PATH_TO_BUNDLE, urlParsed.pathname)); // eslint-disable-line no-param-reassign
+            request = getFile(response, path.join(PATH_TO_SITE, urlParsed.pathname)); // eslint-disable-line no-param-reassign
 
             callback = ({
                 req,
