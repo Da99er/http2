@@ -19,6 +19,10 @@ APIV1['counter-number'] = ({ req, res, params: { choosen } }) => new Promise(((r
 
         ans.error = 'random error';
 
+    } else {
+
+        ans.error = null;
+
     }
 
     resolve(ans);
