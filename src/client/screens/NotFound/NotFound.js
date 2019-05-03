@@ -40,7 +40,7 @@ export default class NotFound extends Component {
 
         // console.log('@>NotFound', this.props);
 
-        const { count, allMenus, siteOptions } = this.props;
+        const { count } = this.props;
 
         return (
             <Wrapper>

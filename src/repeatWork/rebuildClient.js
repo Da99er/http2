@@ -4,7 +4,6 @@ const {
     DOMAIN_NAME,
     PATH_TO_BUNDLE,
     PATH_TO_PUBLIC,
-    PATH_TO_TEMP,
     RELOAD_FILES_STORAGE,
 } = global.MY1_GLOBAL;
 

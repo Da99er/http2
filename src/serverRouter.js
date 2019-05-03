@@ -18,13 +18,10 @@ const {
     UTILS: {
         catchServerError,
         getFile,
-        spreadTokensToDomains,
-        redirectBack,
     },
     DOMAIN_NAME,
     PATH_TO_MIDDLEWARES,
     PATH_TO_BUNDLE,
-    SERVICES,
     PATH_TO_TEMPLATES,
     PATH_TO_SHARED,
     RELOAD_FILES_STORAGE,
@@ -91,10 +88,10 @@ module.exports = () => (request, response) => {
             }())
             .then((resultGraphql) => {
 
-                    res.setHeader('Content-Type', 'application/json');
-                    res.end(JSON.stringify(resultGraphql));
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify(resultGraphql));
 
-                })
+            })
                 .catch(catchServerError({
                     req,
                     res,
