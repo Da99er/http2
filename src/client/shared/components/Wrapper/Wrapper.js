@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import 'shared/style/fonts.scss';
 import 'shared/style/reset.scss';
 
-1;
-
 import S from './Wrapper.scss';
 
 const getColor = (num) => `000000${num}`.slice(-6).replace('.', '');
