@@ -1,21 +1,15 @@
 /* eslint-disable no-unused-vars, no-undef */
+const { resolve } = require('path');
 
 if (window && window.IS_SERVER) {
 
-    const ROOTDIR = global.ROOTDIR = __dirname;
+    const ROOTDIR = global.ROOTDIR = resolve(__dirname, '..');
 
 }
 
 const DOMAIN_NAME = 'my-own-site.cot';
 
-const ERRORS = {
-    '': 'some problem with server',
-    770000: 'unknown error',
-    770041: 'Some problem with parse stream body',
-    770042: 'Bad request',
-    770050: 'unknown error with MySql',
-    770071: 'problem with parse terms request',
-};
+const ERRORS = require('./errors');
 
 module.exports = {
     PORT: process.env.PORT,

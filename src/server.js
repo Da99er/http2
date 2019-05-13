@@ -1,3 +1,5 @@
+const path = require('path');
+
 global.IS_SERVER = true;
 global.window = {
     IS_SERVER: global.IS_SERVER,
@@ -21,7 +23,7 @@ const {
     SERVER_HELPERS,
     PATH_TO_WORKS,
     PATH_TO_APIV1,
-} = global.MY1_GLOBAL = require(`${__dirname}/globals`);
+} = global.MY1_GLOBAL = require(path.join(__dirname, 'globals', 'index'));
 
 require(SERVER_HELPERS);
 require(PATH_TO_WORKS);

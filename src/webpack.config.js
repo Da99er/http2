@@ -34,7 +34,7 @@ const {
     PATH_TO_PUBLIC,
     PATH_TO_SHARED,
     PATH_TO_SCREENS,
-} = require('./globals');
+} = require('./globals/index.js');
 
 const isDevelope = MODE !== 'production';
 const isProduction = MODE === 'production';
@@ -164,7 +164,7 @@ const createWebpackConfig = () => {
             root: __dirname,
             shared: PATH_TO_SHARED,
             screens: PATH_TO_SCREENS,
-            glb$: path.resolve(__dirname, 'globals.js'),
+            glb$: path.resolve(__dirname, 'globals', 'index.js'),
         },
     };
 
