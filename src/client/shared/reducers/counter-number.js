@@ -1,4 +1,4 @@
-import actions from 'shared/const/actions';
+import { actions } from 'glb';
 
 const defaultState = {
     count: 0,

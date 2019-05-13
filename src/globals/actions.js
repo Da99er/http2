@@ -7,4 +7,4 @@ const actions = {
     ...countActions,
 };
 
-export default actions;
+module.exports = actions;

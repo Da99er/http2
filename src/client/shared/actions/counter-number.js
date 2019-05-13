@@ -1,4 +1,4 @@
-import actions from 'shared/const/actions';
+import { actions } from 'glb';
 
 export const additiveCount = (count) => ({
     type: actions.INCREMENT,
