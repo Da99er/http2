@@ -18,12 +18,12 @@ global.requestAnimationFrame = function(callback) {
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const {
-    PATH_TO_UTILS,
+    SERVER_HELPERS,
     PATH_TO_WORKS,
     PATH_TO_APIV1,
 } = global.MY1_GLOBAL = require(`${__dirname}/globals`);
 
-require(PATH_TO_UTILS);
+require(SERVER_HELPERS);
 require(PATH_TO_WORKS);
 require(PATH_TO_APIV1);
 

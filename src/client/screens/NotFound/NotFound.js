@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
-import sameGraphQl from 'shared/lib/sameGraphQl';
-import replaceMaskToLocation from 'shared/lib/replaceMaskToLocation';
+import sameGraphQl from 'shared/utils/sameGraphQl';
+import replaceMaskToLocation from 'shared/utils/replaceMaskToLocation';
 
 import Wrapper from 'shared/components/Wrapper';
 

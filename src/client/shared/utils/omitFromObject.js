@@ -1,4 +1,4 @@
-function getKeysFromObject(obj, ignoreKeys) {
+const getKeysFromObject = (obj, ignoreKeys) => {
 
     const newObj = {};
 
@@ -12,9 +12,8 @@ function getKeysFromObject(obj, ignoreKeys) {
     	newObj[key] = obj[key];
 
     }
-
     return newObj;
 
-}
+};
 
 module.exports = getKeysFromObject;

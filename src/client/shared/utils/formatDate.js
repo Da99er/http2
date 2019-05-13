@@ -49,7 +49,7 @@ const formatraw = (date, format, utc) => {
     res = res.replace(/(^|[^\\])HH+/g, `$1${fill(H)}`);
     res = res.replace(/(^|[^\\])H/g, `$1${H}`);
 
-    const h = H > 12 ? H - 12 : H === 0 ? 12 : H;
+    const h = H > 12 ? H - 12 : (H || 12);
 
     res = res.replace(/(^|[^\\])hh+/g, `$1${fill(h)}`);
     res = res.replace(/(^|[^\\])h/g, `$1${h}`);

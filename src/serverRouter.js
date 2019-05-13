@@ -28,7 +28,7 @@ const {
     RELOAD_FILES_STORAGE,
 } = global.MY1_GLOBAL;
 
-const qs = require(path.join(PATH_TO_SHARED, 'lib', 'prepareQuery'));
+const qs = require(path.join(PATH_TO_SHARED, 'utils', 'prepareQuery'));
 
 const rootIndex = require(path.join(PATH_TO_TEMPLATES, 'rootIndex'));
 

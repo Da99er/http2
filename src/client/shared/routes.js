@@ -1,4 +1,4 @@
-import { stringify } from 'shared/lib/prepareQuery';
+import { stringify } from 'shared/utils/prepareQuery';
 
 import NotFound from 'screens/NotFound';
 

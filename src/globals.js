@@ -27,7 +27,7 @@ module.exports = {
     PATH_TO_BUNDLE: `/var/www/${DOMAIN_NAME}/public`,
     PATH_TO_PUBLIC: '/public/',
     PATH_TO_UPLOADS: '/uploads',
-    PATH_TO_UTILS: `${ROOTDIR}/utils`,
+    SERVER_HELPERS: `${ROOTDIR}/serverHelpers`,
     PATH_TO_WORKS: `${ROOTDIR}/repeatWork`,
     PATH_TO_APIV1: `${ROOTDIR}/apiv1`,
     ROOTDIR,
