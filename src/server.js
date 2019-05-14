@@ -23,7 +23,7 @@ const {
     SERVER_HELPERS,
     PATH_TO_WORKS,
     PATH_TO_APIV1,
-} = global.MY1_GLOBAL = require(path.join(__dirname, 'globals', 'index'));
+} = global.MY1_GLOBAL = require(path.join(__dirname, 'globals', 'server'));
 
 require(SERVER_HELPERS);
 require(PATH_TO_WORKS);

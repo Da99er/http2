@@ -1,4 +1,4 @@
-import { actions } from 'glb';
+import actions from '@globals/actions';
 
 const defaultState = {
     count: 0,

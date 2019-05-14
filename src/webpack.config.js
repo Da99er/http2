@@ -34,7 +34,7 @@ const {
     PATH_TO_PUBLIC,
     PATH_TO_SHARED,
     PATH_TO_SCREENS,
-} = require('./globals/index.js');
+} = require('./globals/server');
 
 const isDevelope = MODE !== 'production';
 const isProduction = MODE === 'production';
@@ -105,14 +105,9 @@ const createWebpackConfig = () => {
         },
     };
 
-    // PATH_TO_SHARED,
-    // PATH_TO_SCREENS,
-
     config.plugins.push(new webpack.DefinePlugin({
         ROOTDIR: JSON.stringify(__dirname),
         MODE: JSON.stringify(MODE),
-        screens: PATH_TO_SCREENS,
-        shared: PATH_TO_SHARED,
     }));
 
     config.plugins.push(new MiniCssExtractPlugin({
@@ -161,10 +156,9 @@ const createWebpackConfig = () => {
             '.js', '.json', '.css', '.scss',
         ],
         alias: {
-            root: __dirname,
-            shared: PATH_TO_SHARED,
-            screens: PATH_TO_SCREENS,
-            glb$: path.resolve(__dirname, 'globals', 'index.js'),
+            '@shared': PATH_TO_SHARED,
+            '@screens': PATH_TO_SCREENS,
+            '@globals': path.resolve(__dirname, 'globals'),
         },
     };
 
@@ -190,7 +184,8 @@ const createWebpackConfig = () => {
                 loader: 'sass-loader',
                 options: {
                     sourceMap: isDevelope,
-                    sourceMapContents: isDevelope },
+                    sourceMapContents: isDevelope,
+                },
             },
         ],
     });

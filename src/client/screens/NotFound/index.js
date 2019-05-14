@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { additiveCount } from 'shared/actions/counter-number';
+import { additiveCount } from '@shared/actions/counter-number';
 
 import NotFound from './NotFound';
 

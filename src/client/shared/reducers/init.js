@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 
-import counterReducer from 'shared/reducers/counter-number';
+import counterReducer from '@shared/reducers/counter-number';
 
 const rootReducer = (history) => combineReducers({
     router: connectRouter(history),

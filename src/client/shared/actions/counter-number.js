@@ -1,4 +1,4 @@
-import { actions } from 'glb';
+import actions from '@globals/actions';
 
 export const additiveCount = (count) => ({
     type: actions.INCREMENT,

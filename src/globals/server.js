@@ -10,7 +10,6 @@ if (window && window.IS_SERVER) {
 const DOMAIN_NAME = 'my-own-site.cot';
 
 const ERRORS = require('./errors');
-const actions = require('./actions');
 
 module.exports = {
     PORT: process.env.PORT,
@@ -31,5 +30,4 @@ module.exports = {
     UTILS: {},
     APIV1: {},
     ERRORS,
-    actions,
 };

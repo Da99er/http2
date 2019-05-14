@@ -1,6 +1,6 @@
-import { stringify } from 'shared/utils/prepareQuery';
+import { stringify } from '@shared/utils/prepareQuery';
 
-import NotFound from 'screens/NotFound';
+import NotFound from '@screens/NotFound';
 
 const routes = [{
     path: '/',

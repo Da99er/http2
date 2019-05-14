@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import 'shared/style/fonts.scss';
-import 'shared/style/reset.scss';
+import '@shared/style/fonts.scss';
+import '@shared/style/reset.scss';
 
 import S from './Wrapper.scss';
 
