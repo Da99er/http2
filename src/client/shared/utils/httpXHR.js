@@ -2,7 +2,7 @@ const httpXHR = ({ path, type = 'GET', contentType, authorization, data }) => ne
 
     if (window.IS_SERVER) {
 
-        return resolve(void 0);
+        return resolve(null);
 
     }
 

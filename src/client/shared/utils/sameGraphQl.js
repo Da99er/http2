@@ -3,7 +3,7 @@ export default ({ method, params = {}, contentType, authorization }) => new Prom
 
     if (window.IS_SERVER) {
 
-        return resolve(void 0);
+        return resolve(null);
 
     }
 
