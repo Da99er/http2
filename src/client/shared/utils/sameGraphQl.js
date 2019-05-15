@@ -1,60 +1,22 @@
-// eslint-disable-next-line no-unused-vars
-export default ({ method, params = {}, contentType, authorization }) => new Promise(((resolve, reject) => {
+import httpXHR from '@shared/utils/httpXHR';
 
-    if (window.IS_SERVER) {
-
-        return resolve(null);
-
-    }
-
-    const xhr = new XMLHttpRequest();
-
-    xhr.withCredentials = true;
-    if (contentType) {
-
-        xhr.setRequestHeader('Content-Type', contentType); // application/json
-
-    }
-    if (authorization) {
-
-        xhr.setRequestHeader('Authorization', authorization); // "JWT eyJhbGciO.iJIUzI1Ni.IsInR5c"
-
-    }
+const sameGraphQl = ({ method, params = {} }) => {
 
     if (method === 'GET') {
 
-        xhr.open(method, `/apiv1/same-graphql?params=${encodeURIComponent(JSON.stringify(params))}`, true);
-
-    } else {
-
-        xhr.open(method, '/apiv1/same-graphql', true);
+        return httpXHR({
+            method,
+            url: `/apiv1/same-graphql?params=${encodeURIComponent(JSON.stringify(params))}`,
+        });
 
     }
 
-    xhr.onreadystatechange = function() {
+    return httpXHR({
+        method,
+        url: '/apiv1/same-graphql',
+        body: encodeURIComponent(JSON.stringify(params)),
+    });
 
-        if (this.readyState !== 4) {
+};
 
-            return;
-
-        }
-
-        let ans = {};
-
-        try {
-
-            ans = JSON.parse(this.responseText);
-
-        } catch (err) {
-
-            ans.error = err;
-
-        }
-
-        resolve(ans);
-
-    };
-
-    return xhr.send(encodeURIComponent(JSON.stringify(params)));
-
-}));
+export default sameGraphQl;

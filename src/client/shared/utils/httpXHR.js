@@ -1,4 +1,4 @@
-const httpXHR = ({ path, type = 'GET', contentType, authorization, data }) => new Promise(((resolve, reject) => {
+const httpXHR = ({ method = 'GET', url, headers = {}, body }) => new Promise(((resolve, reject) => {
 
     if (window.IS_SERVER) {
 
@@ -10,13 +10,13 @@ const httpXHR = ({ path, type = 'GET', contentType, authorization, data }) => ne
 
     xhr.withCredentials = true;
 
-    xhr.open(type, path, true);
+    Object.keys(headers).forEach((headField) => {
 
-    contentType && xhr.setRequestHeader('Content-Type', contentType); // application/json
+        xhr.setRequestHeader(headField, headers[headField]);
 
-    authorization && xhr.setRequestHeader('Authorization', authorization); // "JWT eyJhbGciO.iJIUzI1Ni.IsInR5c"
+    });
 
-    // xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.open(method, url, true);
 
     xhr.onreadystatechange = function() {
 
@@ -44,13 +44,13 @@ const httpXHR = ({ path, type = 'GET', contentType, authorization, data }) => ne
 
     };
 
-    if (type === 'GET') {
+    if (method === 'GET') {
 
-        xhr.send();
+        return xhr.send();
 
     }
 
-    return xhr.send(data);
+    return xhr.send(body);
 
 }));
 
