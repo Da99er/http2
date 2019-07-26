@@ -7,7 +7,7 @@ const ans = {
     error: null,
 };
 
-APIV1['counter-number'] = ({ req, res, params: { choosen } }) => new Promise(((resolve, reject) => {
+APIV1['counter-number'] = ({ choosen }) => new Promise(((resolve, reject) => {
 
     if (choosen) {
 

@@ -12,7 +12,7 @@ import { Route, Switch, StaticRouter } from 'react-router-dom';
 import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
 
 import rootReducer from '@shared/reducers/init';
-import routes from '@shared/routes';
+import routes from '@temp/routes';
 
 const siteRender = (initalState, requestUrl) => {
 

@@ -7,20 +7,20 @@ const defaultState = {
 
 const counterReducer = (state = defaultState, action) => {
 
-    const newState = JSON.parse(JSON.stringify(state));
-
     switch (action.type) {
 
         case actions.INCREMENT:
-            newState.count = action.payload;
-            return newState;
+            state.count = action.payload;
+            break;
         case actions.DECREMENT:
-            newState.count = action.payload;
-            return newState;
+            state.count = action.payload;
+            break;
         default:
-            return state;
+            break;
 
     }
+
+    return state;
 
 };
 

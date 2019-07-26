@@ -7,4 +7,4 @@ const files = fs.readdirSync(PATH_TO_APIV1);
 
 files
     .filter((e) => e !== 'index.js')
-    .map((e) => require(path.join(PATH_TO_APIV1, e.slice(0, -3)))); // rm .js on the end of the string
+    .map((e) => require(path.join(PATH_TO_APIV1, e))); // rm .js on the end of the string

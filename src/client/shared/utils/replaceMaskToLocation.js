@@ -2,11 +2,11 @@ const replaceMaskToLocation = (fetchPreloadData = '', params) => {
 
     const queryObj = JSON.parse(decodeURIComponent(fetchPreloadData));
 
-    Object.keys(queryObj).forEach((key) => {
+    Object.keys(queryObj).forEach((loader) => {
 
-        if (queryObj[key] && queryObj[key].mask) {
+        if (queryObj[loader] && queryObj[loader].mask) {
 
-            queryObj[key] = params;
+            queryObj[loader] = params;
 
         }
 

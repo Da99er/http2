@@ -34,6 +34,7 @@ const {
     PATH_TO_PUBLIC,
     PATH_TO_SHARED,
     PATH_TO_SCREENS,
+    PATH_TO_TEMP,
 } = require('./globals/server');
 
 const isDevelope = MODE !== 'production';
@@ -82,7 +83,7 @@ const createWebpackConfig = () => {
 
     config.entry = {
         index: path.join(__dirname, 'client', 'index'),
-        routes: path.join(PATH_TO_SHARED, 'routes'),
+        routes: path.join(PATH_TO_TEMP, 'routes'),
     };
 
     config.output = {
@@ -104,6 +105,9 @@ const createWebpackConfig = () => {
             },
         },
     };
+
+    // PATH_TO_SHARED,
+    // PATH_TO_SCREENS,
 
     config.plugins.push(new webpack.DefinePlugin({
         ROOTDIR: JSON.stringify(__dirname),
@@ -158,6 +162,7 @@ const createWebpackConfig = () => {
         alias: {
             '@shared': PATH_TO_SHARED,
             '@screens': PATH_TO_SCREENS,
+            '@temp': PATH_TO_TEMP,
             '@globals': path.resolve(__dirname, 'globals'),
         },
     };
@@ -176,9 +181,8 @@ const createWebpackConfig = () => {
             {
                 loader: 'css-loader',
                 options: {
-                    modules: true,
+                    modules: { localIdentName: '[local]__[hash:base64:5]' },
                     sourceMap: isDevelope,
-                    localIdentName: '[local]__[hash:base64:5]',
                 },
             }, {
                 loader: 'sass-loader',

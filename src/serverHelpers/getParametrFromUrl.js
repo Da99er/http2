@@ -1,20 +1,22 @@
 const { UTILS } = global.MY1_GLOBAL;
 
-UTILS.getParametrFromUrl = function(mask, path) {
+UTILS.getParametrFromUrl = (mask, path) => {
 
-    const result = {};
-    const paramNames = mask.split('/:').filter(Boolean);
-    const pathKeys = path.split('/').filter(Boolean);
+    if (!path) {
 
-    for (let i = paramNames.length - 1; i >= 0; i = i - 1) {
-
-        if (pathKeys[i]) {
-
-            result[paramNames[i]] = pathKeys[i];
-
-        }
+        return {};
 
     }
+
+    const result = {};
+    const paramNames = mask.split('/:').slice(1).filter(Boolean).reverse();
+    const pathKeys = path.split('/').filter(Boolean).reverse();
+
+    paramNames.forEach((key, index) => {
+
+        result[key] = pathKeys[index];
+
+    });
 
     return result;
 

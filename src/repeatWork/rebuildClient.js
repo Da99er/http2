@@ -4,6 +4,7 @@ const {
     DOMAIN_NAME,
     PATH_TO_BUNDLE,
     PATH_TO_PUBLIC,
+    PATH_TO_TEMP,
     RELOAD_FILES_STORAGE,
 } = global.MY1_GLOBAL;
 
@@ -29,17 +30,19 @@ const startWatch = () => {
         poll: true, // use polling instead of native watchers
         ignored: /node_modules/,
         progress: true,
+        stats: 'errors-only',
     },
     (errBundle, stats) => {
 
         // eslint-disable-next-line no-console
-        console.log(stats.toString({ colors: true }));
+        console.log(stats.toString({colors: true}));
 
         Object.keys(RELOAD_FILES_STORAGE).forEach((file) => {
 
             const filePath = path.join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE[file]);
 
             delete require.cache[filePath];
+            delete RELOAD_FILES_STORAGE[file];
 
         });
 
@@ -84,10 +87,25 @@ const startWatch = () => {
         });
 
         // eslint-disable-next-line no-console
-        console.info(`${DOMAIN_NAME}:${PORT || 3000}`);
+        console.info(`https://${DOMAIN_NAME}:${PORT || 3000}`);
 
     });
 
 };
 
-startWatch();
+// this only for temp router
+const checkRoutes = setInterval(() => {
+
+    // eslint-disable-next-line no-unused-vars
+    fs.stat(path.join(PATH_TO_TEMP, 'routes.js'), (err, stats) => {
+
+        if (Boolean(err) === false) {
+
+            clearInterval(checkRoutes);
+            startWatch();
+
+        }
+
+    });
+
+}, 1000);

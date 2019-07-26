@@ -2,8 +2,7 @@ const {
     RELOAD_FILES_STORAGE,
 } = global.MY1_GLOBAL;
 
-exports.START = () => `
-<!DOCTYPE html>
+exports.START = () => `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -17,6 +16,6 @@ exports.START = () => `
 <div id="root">`;
 
 exports.END = (preloadData) => `</div>
-<script>window._preloadData=${JSON.stringify(preloadData)}</script>
-<script src="${RELOAD_FILES_STORAGE['index.js']}"></script>
+<script type="text/javascript" id="preloadData">${JSON.stringify(preloadData)}</script>
+<script type="text/javascript" src="${RELOAD_FILES_STORAGE['index.js']}"></script>
 </body></html>`;

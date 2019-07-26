@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import '@shared/style/fonts.scss';
 import '@shared/style/reset.scss';
+import '@shared/style/style.scss';
 
 import S from './Wrapper.scss';
 

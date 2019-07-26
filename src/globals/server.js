@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars, no-undef */
+
 const { resolve } = require('path');
 
 if (window && window.IS_SERVER) {
@@ -8,7 +9,6 @@ if (window && window.IS_SERVER) {
 }
 
 const DOMAIN_NAME = 'my-own-site.cot';
-
 const ERRORS = require('./errors');
 
 module.exports = {
@@ -16,6 +16,7 @@ module.exports = {
     PATH_TO_SHARED: `${ROOTDIR}/client/shared`,
     PATH_TO_SCREENS: `${ROOTDIR}/client/screens`,
     PATH_TO_TEMPLATES: `${ROOTDIR}/client/shared/templates`,
+    PATH_TO_TEMP: `${ROOTDIR}/temp`,
     PATH_TO_MIDDLEWARES: `${ROOTDIR}/middlewares`,
     PATH_TO_SITE: `/var/www/${DOMAIN_NAME}`,
     PATH_TO_BUNDLE: `/var/www/${DOMAIN_NAME}/public`,

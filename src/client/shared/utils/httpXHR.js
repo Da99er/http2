@@ -8,7 +8,7 @@ const httpXHR = ({ method = 'GET', url, headers = {}, body }) => new Promise(((r
 
     const xhr = new XMLHttpRequest();
 
-    xhr.withCredentials = true;
+    xhr.open(method, url, true);
 
     Object.keys(headers).forEach((headField) => {
 
@@ -16,7 +16,7 @@ const httpXHR = ({ method = 'GET', url, headers = {}, body }) => new Promise(((r
 
     });
 
-    xhr.open(method, url, true);
+    xhr.withCredentials = true;
 
     xhr.onreadystatechange = function() {
 
