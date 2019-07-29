@@ -4,6 +4,7 @@ const { exec } = require('child_process');
 
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BrotliPlugin = require('brotli-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -106,9 +107,6 @@ const createWebpackConfig = () => {
         },
     };
 
-    // PATH_TO_SHARED,
-    // PATH_TO_SCREENS,
-
     config.plugins.push(new webpack.DefinePlugin({
         ROOTDIR: JSON.stringify(__dirname),
         MODE: JSON.stringify(MODE),
@@ -119,6 +117,16 @@ const createWebpackConfig = () => {
         // both options are optional
         filename: '[name].[hash].css',
         chunkFilename: '[id].css',
+    }));
+
+    config.plugins.push(new HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: path.join(PATH_TO_SHARED, 'templates', 'index.html'),
+        inject: true, // output links will be add in code
+        minify: {
+            html5: true,
+            collapseWhitespace: isProduction,
+        },
     }));
 
     if (isProduction) {
