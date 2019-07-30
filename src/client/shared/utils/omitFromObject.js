@@ -1,19 +1,21 @@
-const getKeysFromObject = (obj, ignoreKeys) => {
+const omitFromObject = (obj = {}, ignoreKeys) => {
 
     const newObj = {};
 
-    for (const key in obj) {
+    Object.keys(obj).forEach((objKey) => {
 
-    	if (ignoreKeys.includes(key)) {
+        if (ignoreKeys.includes(objKey)) {
 
-    		continue;
+            return;
 
         }
-    	newObj[key] = obj[key];
 
-    }
+        newObj[objKey] = obj[objKey];
+
+    });
+
     return newObj;
 
 };
 
-module.exports = getKeysFromObject;
+module.exports = omitFromObject;
