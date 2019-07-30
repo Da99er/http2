@@ -14,6 +14,8 @@ import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
 import rootReducer from '@shared/reducers/init';
 import routes from '@temp/routes';
 
+import sameGraphQl from '@shared/utils/sameGraphQl';
+
 const siteRender = (initalState, requestUrl) => {
 
     const history = window.IS_SERVER ? createMemoryHistory() : createBrowserHistory();
@@ -69,10 +71,29 @@ const siteRender = (initalState, requestUrl) => {
 
 if (!window.IS_SERVER) {
 
-    ReactDOM.hydrate(
-        siteRender(window._preloadData),
-        document.getElementById('root')
-    );
+    const pageQueryRaw = document.getElementById('preloadData').innerHTML.slice(1, -1);
+
+    const parsedPageQuery = JSON.parse(decodeURIComponent(pageQueryRaw) || '{}');
+
+    parsedPageQuery.pathname = location.pathname;
+
+    sameGraphQl({
+        method: 'GET',
+        params: parsedPageQuery,
+    })
+        .then((res) => {
+
+            ReactDOM.hydrate(
+                siteRender(res),
+                document.getElementById('root')
+            );
+
+        })
+        .catch((err) => {
+
+            console.error(err); // eslint-disable-line no-console
+
+        });
 
 }
 
