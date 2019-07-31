@@ -73,7 +73,7 @@ if (!window.IS_SERVER) {
 
     const pageQueryRaw = document.getElementById('preloadData').innerHTML.slice(1, -1);
 
-    const parsedPageQuery = JSON.parse(decodeURIComponent(pageQueryRaw) || '{}');
+    const parsedPageQuery = JSON.parse(decodeURIComponent(pageQueryRaw).trim() || '{}');
 
     parsedPageQuery.pathname = location.pathname;
 
