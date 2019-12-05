@@ -1,5 +1,5 @@
 const formidable = require('formidable');
-const { UTILS, PATH_TO_BUNDLE } = global.MY1_GLOBAL;
+const { UTILS, PATH_TO_SITE } = global.MY1_GLOBAL;
 
 UTILS.parseBody = (req, res) => new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
 
@@ -9,7 +9,7 @@ UTILS.parseBody = (req, res) => new Promise((resolve, reject) => { // eslint-dis
 
     const fields = [];
 
-    form.uploadDir = PATH_TO_BUNDLE;
+    form.uploadDir = `${PATH_TO_SITE}/uploads`;
 
     form.on('field', (field, value) => {
 

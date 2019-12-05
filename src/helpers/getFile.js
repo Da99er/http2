@@ -7,7 +7,7 @@ UTILS.getFile = function(res, path) {
     const file = fs.createReadStream(path);
 
     /* file.on('data', (chunk) => {
-        console.log('@>chunk.length', chunk.length);
+        console.log('chunk.length', chunk.length);
     });*/
 
     file.on('error', (err) => {

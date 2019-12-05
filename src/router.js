@@ -1,36 +1,25 @@
 const url = require('url');
-const path = require('path');
+const { join, extname } = require('path');
 const MimeLookup = require('mime-lookup');
 const mime = new MimeLookup(require('mime-db'));
-
-const {
-    matchPath,
-} = require('react-router-dom');
-
-const {
-    Readable,
-} = require('stream');
-
-const ReactDOMServer = require('react-dom/server');
 
 const {
     APIV1,
     UTILS: {
         catchServerError,
         getFile,
+        parse,
+        matchPath,
     },
     DOMAIN_NAME,
     PATH_TO_MIDDLEWARES,
     PATH_TO_SITE,
     PATH_TO_BUNDLE,
-    PATH_TO_TEMPLATES,
-    PATH_TO_SHARED,
+    PATH_TO_CLIENT,
     RELOAD_FILES_STORAGE,
 } = global.MY1_GLOBAL;
 
-const qs = require(path.join(PATH_TO_SHARED, 'utils', 'prepareQuery'));
-
-const rootIndex = require(path.join(PATH_TO_TEMPLATES, 'rootIndex'));
+const { Readable } = require('stream');
 
 const middlewares = require(PATH_TO_MIDDLEWARES);
 
@@ -45,9 +34,9 @@ module.exports = () => (request, response) => {
 
         console.sent(DOMAIN_NAME, request.method, urlParsed.host, request.headers.referer, urlParsed.pathname); // eslint-disable-line no-console
 
-        if (path.extname(urlParsed.pathname).length) {
+        if (extname(urlParsed.pathname).length) {
 
-            request = getFile(response, path.join(PATH_TO_SITE, urlParsed.pathname)); // eslint-disable-line no-param-reassign
+            request = getFile(response, join(PATH_TO_SITE, urlParsed.pathname)); // eslint-disable-line no-param-reassign
 
             return ({
                 req,
@@ -75,11 +64,11 @@ module.exports = () => (request, response) => {
 
                     if (request.method === 'GET') {
 
-                        graphQueryParams = qs.parse(urlParsed.query.params);
+                        graphQueryParams = parse(urlParsed.query.params);
 
                     } else if (request.method === 'POST') {
 
-                        graphQueryParams = qs.parse(req.body);
+                        graphQueryParams = parse(req.body);
 
                     }
 
@@ -97,7 +86,7 @@ module.exports = () => (request, response) => {
 
                     }
 
-                    // @> STATUS CODE???????
+                    // TODO STATUS CODE???????
 
                     return preloadData;
 
@@ -128,22 +117,15 @@ module.exports = () => (request, response) => {
 
                     (async function() {
 
-                        const indexUrl = path.join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE['index.js'].split('/').pop());
-                        const routesUrl = path.join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE['routes.js'].split('/').pop());
+                        const PATH_TO_SERVER = join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE['server.js']);
+                        const PATH_TO_ROUTES = join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE['routes.js']);
 
-                        const index = require(indexUrl).default;
-                        const routes = require(routesUrl).default;
+                        const routes = require(PATH_TO_ROUTES).default;
 
                         const preloadData = {};
 
-                        let responseStream = new Readable();
-
-                        const activeRoute = routes.find((route) => matchPath(req.url, route)) || {};
-
-                        responseStream.push('Page without render');
-                        responseStream.push(null);
-
-                        const graphQueryParams = qs.parse(activeRoute.fetchPreloadData) || {};
+                        const activeRoute = matchPath(routes, req.url);
+                        const graphQueryParams = parse(activeRoute.fetchPreloadData);
 
                         for (const param in graphQueryParams) {
 
@@ -159,38 +141,30 @@ module.exports = () => (request, response) => {
 
                         }
 
-                        // TODO handle server status
+                        const responseStream = new Readable();
 
-                        // Render your frontend to a stream and pipe it to the response
-                        const rootReactElement = index(preloadData, req.url);
+                        // TODO need build templates
+                        const indexTemplate = require(join(PATH_TO_CLIENT, 'templates'));
 
-                        responseStream = ReactDOMServer.renderToNodeStream(rootReactElement);
+                        responseStream.push(indexTemplate.START());
 
-                        res.write(rootIndex.START());
+                        const appCreator = require(PATH_TO_SERVER).default;
+
+                        responseStream.push(appCreator(preloadData, req.url));
+
+                        responseStream.push(indexTemplate.END(activeRoute.fetchPreloadData));
+                        responseStream.push(null);
                         // When React finishes rendering send the rest of your HTML to the browser
-                        responseStream.on('end', () => {
-
-                            res.end(rootIndex.END(activeRoute.fetchPreloadData));
-
-                        });
-
-                        responseStream.on('close', () => {
-
-                            responseStream.destroy();
-
-                        });
-
+                        responseStream.on('end', () => res.end());
+                        responseStream.on('close', () => responseStream.destroy());
                         responseStream.on('error', (err) => {
 
                             console.err(err); // eslint-disable-line no-console
-
-                            res.end(rootIndex.END(activeRoute.fetchPreloadData));
+                            res.end(indexTemplate.END(activeRoute.fetchPreloadData));
 
                         });
 
-                        responseStream.pipe(res, {
-                            end: 'false',
-                        });
+                        responseStream.pipe(res);
 
                     }()).catch(catchServerError({
                         req,

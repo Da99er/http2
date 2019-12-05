@@ -32,7 +32,7 @@ server {
   gzip_disable "msie6";
 
   root /var/www/my-own-site.cot;
-  index index.php index.html index.htm index.nginx-debian.html;
+  index public/index.html;
 
   location = /favicon.ico {
 
@@ -51,11 +51,11 @@ server {
     try_files $uri @node;
   }
 
-  location /php-admin/ {
+  location /php-admin {
     try_files $uri $uri/ /index.php$is_args$args;
   }
 
-  location /public/ {
+  location /public {
     try_files $uri $uri/;
   }
 
@@ -90,7 +90,7 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
 
-    error_page 502 = /public/index.html;
+    error_page 502 /public/index.html;
 
     # Fix the “It appears that your reverse proxy set up is broken" error.
     proxy_pass http://my-own-site.cot:3000;

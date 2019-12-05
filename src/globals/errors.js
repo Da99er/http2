@@ -1,5 +1,4 @@
 module.exports = {
-    '': 'some problem with server',
     770000: 'unknown error',
     770001: 'Incorrect userEmail',
     770002: 'Incorrect password',
