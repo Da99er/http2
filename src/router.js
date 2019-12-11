@@ -9,7 +9,9 @@ const {
         catchServerError,
         getFile,
         parse,
+        stringify,
         matchPath,
+        getItemsFromPath,
     },
     DOMAIN_NAME,
     PATH_TO_MIDDLEWARES,
@@ -58,27 +60,31 @@ module.exports = () => (request, response) => {
 
                 const preloadData = {};
 
-                let graphQueryParams = {};
+                let graphQueryProperties = {};
+                const items = parse(urlParsed.query.items);
+                const params = parse(urlParsed.query.params);
 
                 (async function() {
 
                     if (request.method === 'GET') {
 
-                        graphQueryParams = parse(urlParsed.query.params);
+                        graphQueryProperties = parse(urlParsed.query.query);
 
-                    } else if (request.method === 'POST') {
+                    } else {
 
-                        graphQueryParams = parse(req.body);
+                        graphQueryProperties = parse(req.body);
 
                     }
 
-                    for (const param in graphQueryParams) {
+                    for (const property in graphQueryProperties) {
 
-                        if (APIV1[param]) {
+                        if (APIV1[property]) {
 
-                            preloadData[param] = await APIV1[param]({
-                                ...graphQueryParams[param],
-                                pathname: graphQueryParams.pathname || null,
+                            preloadData[property] = await APIV1[property]({
+                                ...graphQueryProperties[property],
+                            }, {
+                                items,
+                                params,
                                 cookie: req.headers.cookie,
                             });
 
@@ -86,7 +92,7 @@ module.exports = () => (request, response) => {
 
                     }
 
-                    // TODO STATUS CODE???????
+                    // TODO RESPONSE STATUS CODE
 
                     return preloadData;
 
@@ -124,16 +130,20 @@ module.exports = () => (request, response) => {
 
                         const preloadData = {};
 
-                        const activeRoute = matchPath(routes, req.url);
-                        const graphQueryParams = parse(activeRoute.fetchPreloadData);
+                        const params = parse(urlParsed.query.params);
+                        const activeRoute = matchPath(routes, urlParsed.pathname);
+                        const graphQueryProperties = parse(activeRoute.preloadDataQuery);
+                        const items = getItemsFromPath(activeRoute.path, urlParsed.pathname);
 
-                        for (const param in graphQueryParams) {
+                        for (const property in graphQueryProperties) {
 
-                            if (APIV1[param]) {
+                            if (APIV1[property]) {
 
-                                preloadData[param] = await APIV1[param]({
-                                    ...graphQueryParams[param],
-                                    pathname: graphQueryParams.pathname || urlParsed.pathname,
+                                preloadData[property] = await APIV1[property]({
+                                    ...graphQueryProperties[property],
+                                }, {
+                                    items,
+                                    params,
                                     cookie: req.headers.cookie,
                                 });
 
@@ -152,7 +162,10 @@ module.exports = () => (request, response) => {
 
                         responseStream.push(appCreator(preloadData, req.url));
 
-                        responseStream.push(indexTemplate.END(activeRoute.fetchPreloadData));
+                        responseStream.push(indexTemplate.END({
+                            preloadDataQuery: activeRoute.preloadDataQuery,
+                            items: stringify(items),
+                        }));
                         responseStream.push(null);
                         // When React finishes rendering send the rest of your HTML to the browser
                         responseStream.on('end', () => res.end());
@@ -160,7 +173,7 @@ module.exports = () => (request, response) => {
                         responseStream.on('error', (err) => {
 
                             console.err(err); // eslint-disable-line no-console
-                            res.end(indexTemplate.END(activeRoute.fetchPreloadData));
+                            res.end(indexTemplate.END(activeRoute.preloadDataQuery));
 
                         });
 

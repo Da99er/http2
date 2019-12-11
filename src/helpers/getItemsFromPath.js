@@ -1,6 +1,6 @@
 const { UTILS } = global.MY1_GLOBAL;
 
-UTILS.getParametrFromUrl = (mask, path) => {
+UTILS.getItemsFromPath = (mask, path) => {
 
     if (!path) {
 

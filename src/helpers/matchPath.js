@@ -4,7 +4,7 @@ const { UTILS } = global.MY1_GLOBAL;
 UTILS.matchPath = (routes = [], url = '') => {
 
     const defaultRoute = {
-        fetchPreloadData: UTILS.stringify({}),
+        preloadDataQuery: UTILS.stringify({}),
     };
 
     const parsedRoutes = match(url, routes.map(({ path }) => path).map(parse));
