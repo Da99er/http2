@@ -72,7 +72,7 @@ module.exports = () => (request, response) => {
 
                     } else {
 
-                        graphQueryProperties = parse(req.body);
+                        graphQueryProperties = req.body;
 
                     }
 
@@ -80,13 +80,12 @@ module.exports = () => (request, response) => {
 
                         if (APIV1[property]) {
 
-                            preloadData[property] = await APIV1[property]({
-                                ...graphQueryProperties[property],
-                            }, {
-                                items,
-                                params,
-                                cookie: req.headers.cookie,
-                            });
+                            preloadData[property] = await APIV1[property](
+                                graphQueryProperties[property], {
+                                    items,
+                                    params,
+                                    cookie: req.headers.cookie,
+                                });
 
                         }
 

@@ -3,68 +3,37 @@ const { UTILS, PATH_TO_SITE } = global.MY1_GLOBAL;
 
 UTILS.parseBody = (req, res) => new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
 
+    const headers = req.headers;
     const form = new formidable.IncomingForm();
-
-    const files = [];
-
-    const fields = [];
 
     form.uploadDir = `${PATH_TO_SITE}/uploads`;
 
-    form.on('field', (field, value) => {
+    form.parse(req, (error, fields, files) => {
 
-        fields.push([field, value]);
-
-    })
-        .on('file', (field, file) => {
-
-            // file.name = true;
-            files.push([field, file]);
-
-        })
-        .on('error', (err) => {
+        if (error) {
 
             req.responceError = {
                 errorCode: 770041,
                 httpCode: 403,
-                errorBody: err,
+                errorBody: error,
             };
+            reject(req.responceError);
 
-            reject({
-                errorCode: 770041,
-                httpCode: 403,
-            });
+        }
 
-        })
-        .on('end', () => {
+        req.body = {
+            ...fields,
+            ...files,
+        };
 
-            if (form.headers['content-type'].includes('multipart/form-data; boundary=') || form.headers['content-type'].includes('application/json')) {
+        if (headers['same-graphql']) {
 
-                if (!req.body) {
+            req.body = JSON.parse(Object.keys(fields)[0]);
 
-                    req.body = {};
+        }
 
-                }
+        resolve(req.body);
 
-                fields.forEach((field) => {
-
-                    req.body[field[0]] = field[1];
-
-                });
-
-                resolve(req.body);
-
-            } else {
-
-                reject({
-                    errorCode: 770042,
-                    httpCode: 503,
-                });
-
-            }
-
-        });
-
-    form.parse(req);
+    });
 
 });

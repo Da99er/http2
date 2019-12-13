@@ -6,7 +6,7 @@ const {
 
 module.exports = ({ req, res }, next) => {
 
-    if (req.method === 'POST') {
+    if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
 
         return parseBody(req, req).then((result) => {
 
@@ -23,7 +23,7 @@ module.exports = ({ req, res }, next) => {
 
             req.responceError = {
                 errorCode: 770041,
-                httpCode: 403,
+                httpCode: 400,
             };
 
             return next({ req, res });

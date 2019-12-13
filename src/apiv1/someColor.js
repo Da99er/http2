@@ -7,9 +7,9 @@ const ans = {
     error: null,
 };
 
-const generateColor = (c1 = ans.color, c2 = ans.color) => (String(c2[0]) + c1[0] + c2[1] + c1[1] + c2[2] + c1[2] + c2[3] + c1[3]).replace('.', '').slice(0, 6);
+const generateColor = (c1 = ans.color, c2 = ans.color) => (c1[0] + c1[0] + c2[1] + c2[1] + c1[2] + c1[2] + c1[3] + c2[3]).replace('.', '').slice(0, 6);
 
-APIV1.someColor = ({ color }, {items}) => new Promise(((resolve, reject) => {
+APIV1.someColor = ({ color }, { items }) => new Promise(((resolve, reject) => {
 
     if (color) {
 
