@@ -1,10 +1,6 @@
 server {
 
-  return 301 https://$host$request_uri;
-  
-}
-
-server {
+  #add_header Content-Security-Policy "default-src 'self';";
 
   listen 443 ssl http2;
   server_name www.my-own-site.cot my-own-site.cot;
@@ -32,7 +28,7 @@ server {
   gzip_disable "msie6";
 
   root /var/www/my-own-site.cot;
-  index public/index.html;
+  index index.php index.html index.htm index.nginx-debian.html;
 
   location = /favicon.ico {
 
@@ -41,26 +37,25 @@ server {
   }
 
   location = /robots.txt {
-
     allow all;
     log_not_found off;
     access_log off;
   }
 
-  location / {
-    try_files $uri @node;
-  }
-
-  location /php-admin {
+  location /wp-admin/ {
     try_files $uri $uri/ /index.php$is_args$args;
   }
 
-  location /public {
+  location /wp-content/public/ {
     try_files $uri $uri/;
   }
 
   location ~ .(png|gif|ico|jpg|jpeg|css|js)$ {
     try_files $uri $uri/;
+  }
+
+  location / {
+    try_files $uri @node;
   }
 
   location ~ \.php$ {
@@ -79,7 +74,7 @@ server {
     deny all;
   }
 
-  location ~ ^/secret-folder/.*\.php$ {
+  location ~ ^/wp-content/uploads/.*\.php$ {
     deny all;
   }
 
@@ -90,7 +85,7 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
 
-    error_page 502 /public/index.html;
+    error_page 502 = /index.php;
 
     # Fix the “It appears that your reverse proxy set up is broken" error.
     proxy_pass http://my-own-site.cot:3000;
