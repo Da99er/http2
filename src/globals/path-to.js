@@ -10,5 +10,5 @@ module.exports = {
     PATH_TO_CLIENT: '/home/vadim/Documents/react-client/src',
     PATH_TO_TEMP: '/home/vadim/Documents/react-client/src/temp',
     PATH_TO_SITE: `/var/www/${DOMAIN_NAME}`,
-    PATH_TO_BUNDLE: `/var/www/${DOMAIN_NAME}/public`,
+    PATH_TO_BUNDLE: `/var/www/${DOMAIN_NAME}/wp-content/public`,
 };
