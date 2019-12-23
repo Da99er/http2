@@ -19,6 +19,8 @@ http.createServer(serverRouter()).listen(PORT, '127.0.0.1', () => {
 
 });
 
+let prevBuildHash = '';
+
 const startWatch = () => {
 
     setInterval(() => {
@@ -31,7 +33,9 @@ const startWatch = () => {
 
             }
 
-            if (files.join('') !== Object.keys(RELOAD_FILES_STORAGE).join('')) {
+            if (files.length && (prevBuildHash !== files.join(''))) {
+
+                prevBuildHash = files.join('');
 
                 Object.keys(RELOAD_FILES_STORAGE).forEach((file) => {
 
