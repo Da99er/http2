@@ -1,7 +1,5 @@
 const url = require('url');
 const { join, extname } = require('path');
-const MimeLookup = require('mime-lookup');
-const mime = new MimeLookup(require('mime-db'));
 
 const {
     APIV1,
@@ -10,8 +8,7 @@ const {
         getFile,
         parse,
         stringify,
-        matchPath,
-        getItemsFromPath,
+        findActivePath,
     },
     DOMAIN_NAME,
     PATH_TO_MIDDLEWARES,
@@ -30,7 +27,6 @@ module.exports = () => (request, response) => {
     const callback = (() => {
 
         const urlParsed = url.parse(request.url, true);
-        const reqType = mime.lookup(urlParsed.pathname);
 
         request.urlParsed = urlParsed;
 
@@ -61,7 +57,10 @@ module.exports = () => (request, response) => {
                 const preloadData = {};
 
                 let graphQueryProperties = {};
-                const items = parse(urlParsed.query.items);
+
+                let routerItems = parse(urlParsed.query.items);
+
+                routerItems = routerItems.anything ? {} : routerItems;
                 const params = parse(urlParsed.query.params);
 
                 (async function() {
@@ -82,7 +81,7 @@ module.exports = () => (request, response) => {
 
                             preloadData[property] = await APIV1[property](
                                 graphQueryProperties[property], {
-                                    items,
+                                    routerItems,
                                     params,
                                     cookie: req.headers.cookie,
                                 });
@@ -113,79 +112,74 @@ module.exports = () => (request, response) => {
 
         if (request.method === 'GET') {
 
-            if (reqType === 'application/octet-stream') {
+            return ({
+                req,
+                res,
+            }) => {
 
-                return ({
-                    req,
-                    res,
-                }) => {
+                (async function() {
 
-                    (async function() {
+                    const PATH_TO_SERVER = join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE['server.js']);
+                    const PATH_TO_ROUTES = join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE['routes.js']);
 
-                        const PATH_TO_SERVER = join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE['server.js']);
-                        const PATH_TO_ROUTES = join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE['routes.js']);
+                    const routes = require(PATH_TO_ROUTES).default;
 
-                        const routes = require(PATH_TO_ROUTES).default;
+                    const preloadData = {};
 
-                        const preloadData = {};
+                    const params = parse(urlParsed.query.params);
+                    const activeRoute = findActivePath(routes, urlParsed.pathname);
 
-                        const params = parse(urlParsed.query.params);
-                        const activeRoute = matchPath(routes, urlParsed.pathname);
-                        const graphQueryProperties = parse(activeRoute.preloadDataQuery);
-                        const items = getItemsFromPath(activeRoute.path, urlParsed.pathname);
+                    const graphQueryProperties = parse(activeRoute.preloadDataQuery);
 
-                        for (const property in graphQueryProperties) {
+                    for (const property in graphQueryProperties) {
 
-                            if (APIV1[property]) {
+                        if (APIV1[property]) {
 
-                                preloadData[property] = await APIV1[property]({
-                                    ...graphQueryProperties[property],
-                                }, {
-                                    items,
-                                    params,
-                                    cookie: req.headers.cookie,
-                                });
-
-                            }
+                            preloadData[property] = await APIV1[property]({
+                                ...graphQueryProperties[property],
+                            }, {
+                                routerItems: activeRoute.routerItems,
+                                params,
+                                cookie: req.headers.cookie,
+                            });
 
                         }
 
-                        const responseStream = new Readable();
+                    }
 
-                        // TODO need build templates
-                        const indexTemplate = require(join(PATH_TO_CLIENT, 'templates'));
+                    const responseStream = new Readable();
 
-                        responseStream.push(indexTemplate.START());
+                    // TODO need build templates
+                    const indexTemplate = require(join(PATH_TO_CLIENT, 'templates'));
 
-                        const appCreator = require(PATH_TO_SERVER).default;
+                    responseStream.push(indexTemplate.START());
 
-                        responseStream.push(appCreator(preloadData, req.url));
+                    const appCreator = require(PATH_TO_SERVER).default;
 
-                        responseStream.push(indexTemplate.END({
-                            preloadDataQuery: activeRoute.preloadDataQuery,
-                            items: stringify(items),
-                        }));
-                        responseStream.push(null);
-                        // When React finishes rendering send the rest of your HTML to the browser
-                        responseStream.on('end', () => res.end());
-                        responseStream.on('close', () => responseStream.destroy());
-                        responseStream.on('error', (err) => {
-
-                            console.err(err); // eslint-disable-line no-console
-                            res.end(indexTemplate.END(activeRoute.preloadDataQuery));
-
-                        });
-
-                        responseStream.pipe(res);
-
-                    }()).catch(catchServerError({
-                        req,
-                        res,
+                    responseStream.push(appCreator(preloadData, req.url));
+                    responseStream.push(indexTemplate.END({
+                        preloadDataQuery: activeRoute.preloadDataQuery,
+                        routerItems: stringify(activeRoute.routerItems),
                     }));
+                    responseStream.push(null);
+                    // When React finishes rendering send the rest of your HTML to the browser
+                    responseStream.on('end', () => res.end());
+                    responseStream.on('close', () => responseStream.destroy());
+                    responseStream.on('error', (err) => {
 
-                };
+                        console.err(err); // eslint-disable-line no-console
+                        res.end(indexTemplate.END(activeRoute.preloadDataQuery));
 
-            }
+                    });
+
+                    responseStream.pipe(res);
+
+                }()).catch(catchServerError({
+                    req,
+                    res,
+                }));
+
+            };
 
         }
 

@@ -48,15 +48,13 @@
     "dependencies": {
         "formidable": "^1.2.1",
         "jsonwebtoken": "^8.5.1",
-        "matchit": "^1.0.8",
-        "mime-db": "^1.42.0",
-        "mime-lookup": "0.0.2",
         "mongoose": "^5.8.1",
         "multiparty": "^4.2.1",
         "mysql2": "^2.0.2",
         "passport": "^0.4.1",
         "passport-custom": "^1.1.0",
         "passport-local": "^1.0.0",
+        "path-to-regexp": "^6.1.0",
         "php-serialize": "^3.0.1",
         "validator": "^12.1.0"
     }
