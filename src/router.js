@@ -80,9 +80,11 @@ module.exports = () => (request, response) => {
                         if (APIV1[property]) {
 
                             preloadData[property] = await APIV1[property](
-                                graphQueryProperties[property], {
+                                {
+                                    ...graphQueryProperties[property],
+                                    ...params,
+                                }, {
                                     routerItems,
-                                    params,
                                     cookie: req.headers.cookie,
                                 });
 
@@ -137,9 +139,9 @@ module.exports = () => (request, response) => {
 
                             preloadData[property] = await APIV1[property]({
                                 ...graphQueryProperties[property],
+                                ...params,
                             }, {
                                 routerItems: activeRoute.routerItems,
-                                params,
                                 cookie: req.headers.cookie,
                             });
 

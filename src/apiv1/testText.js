@@ -5,9 +5,9 @@ const ans = {
     error: null,
 };
 
-APIV1.testText = ({ text }, { routerItems, params }) => new Promise(((resolve, reject) => {
+APIV1.testText = (params, { routerItems }) => new Promise(((resolve, reject) => {
 
-    const newString = text ? text : 'emty';
+    const newString = params.text ? params.text : 'emty';
 
     if (newString && routerItems.test === 'erro') {
 
