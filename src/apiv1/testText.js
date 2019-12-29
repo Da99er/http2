@@ -1,11 +1,11 @@
 const { APIV1 } = global.MY1_GLOBAL;
 
-const ans = {
-    text: '',
-    error: null,
-};
-
 APIV1.testText = (params, { routerItems }) => new Promise(((resolve, reject) => {
+
+    const ans = {
+        text: '',
+        error: null,
+    };
 
     const newString = params.text ? params.text : 'emty';
 
