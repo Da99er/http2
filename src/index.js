@@ -8,12 +8,12 @@ global.MY1_GLOBAL = require(join(global.ROOTDIR, 'globals'));
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const {
-    PATH_TO_SERVER_HELPERS,
+    PATH_TO_UTILS,
     PATH_TO_WORKS,
     PATH_TO_APIV1,
 } = global.MY1_GLOBAL;
 
-require(PATH_TO_SERVER_HELPERS);
+require(PATH_TO_UTILS);
 require(PATH_TO_WORKS);
 require(PATH_TO_APIV1);
 
