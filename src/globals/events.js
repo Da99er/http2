@@ -1,0 +1,3 @@
+module.exports = {
+    EVENT_SERVER_IS_RUNNING: 'EVENT_SERVER_IS_RUNNING',
+};

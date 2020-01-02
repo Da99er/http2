@@ -3,6 +3,7 @@
 const ERRORS = require('./errors');
 const PATH_TO = require('./path-to');
 const SERVER = require('./server');
+const EVENTS = require('./events');
 
 const DOMAIN_NAME = process.env.DOMAIN_NAME;
 
@@ -12,4 +13,5 @@ module.exports = {
     ...ERRORS,
     ...PATH_TO,
     ...SERVER,
+    ...EVENTS,
 };

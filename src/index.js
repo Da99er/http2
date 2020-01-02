@@ -1,8 +1,9 @@
 const { resolve, join } = require('path');
+const { EventEmitter } = require('events');
 
 global.ROOTDIR = resolve(__dirname);
-
 global.MY1_GLOBAL = require(join(global.ROOTDIR, 'globals'));
+global.MY1_GLOBAL.emitter = new EventEmitter();
 
 // some problem with SSL and HTTPS
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
