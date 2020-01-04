@@ -1,8 +1,6 @@
 const fs = require('fs');
 
-const { UTILS } = global.MY1_GLOBAL;
-
-UTILS.getFile = function(res, path) {
+const getFile = function(res, path) {
 
     const file = fs.createReadStream(path);
 
@@ -30,3 +28,5 @@ UTILS.getFile = function(res, path) {
     return file;
 
 };
+
+module.exports = getFile;

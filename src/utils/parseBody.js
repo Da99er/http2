@@ -1,7 +1,7 @@
 const formidable = require('formidable');
-const { UTILS, PATH_TO_SITE } = global.MY1_GLOBAL;
+const { PATH_TO_SITE } = require('../globals/path-to');
 
-UTILS.parseBody = (req, res) => new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
+const parseBody = (req, res) => new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
 
     const headers = req.headers;
     const form = new formidable.IncomingForm();
@@ -37,3 +37,5 @@ UTILS.parseBody = (req, res) => new Promise((resolve, reject) => { // eslint-dis
     });
 
 });
+
+module.exports = parseBody;

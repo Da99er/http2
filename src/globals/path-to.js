@@ -1,8 +1,11 @@
-/* eslint-disable no-undef */
+const { resolve } = require('path');
 
 const DOMAIN_NAME = process.env.DOMAIN_NAME;
 
+const ROOTDIR = resolve(__dirname, '..');
+
 module.exports = {
+    ROOTDIR,
     PATH_TO_MIDDLEWARES: `${ROOTDIR}/middlewares`,
     PATH_TO_UTILS: `${ROOTDIR}/utils`,
     PATH_TO_WORKS: `${ROOTDIR}/repeatWorks`,

@@ -1,7 +1,5 @@
 /* eslint-disable */
 
-const { UTILS } = global.MY1_GLOBAL;
-
 class Middleware {
 
     constructor() {
@@ -41,6 +39,6 @@ class Middleware {
 
 }
 
-UTILS.Middleware = Middleware;
+module.exports = Middleware;
 
 // ({req, res},callback)

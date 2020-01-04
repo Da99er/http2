@@ -1,13 +1,16 @@
+const { join } = require('path');
 const { match } = require('path-to-regexp');
-const { UTILS } = global.MY1_GLOBAL;
+
+const { PATH_TO_UTILS } = require(join(__dirname, '..', 'globals', 'path-to'));
+const { stringify } = require(join(PATH_TO_UTILS, 'prepareQuery'));
 
 const chekerOptions = { decode: decodeURIComponent };
 
-UTILS.findActivePath = (routes = [], url = '') => {
+const findActivePath = (routes = [], url = '') => {
 
     const defaultRoute = {
-        preloadDataQuery: UTILS.stringify({}),
-        routerItems: UTILS.stringify({}),
+        preloadDataQuery: stringify({}),
+        routerItems: stringify({}),
     };
 
     const foundedRoute = routes.find(({ path }) => {
@@ -36,3 +39,5 @@ UTILS.findActivePath = (routes = [], url = '') => {
     return defaultRoute;
 
 };
+
+module.exports = findActivePath;

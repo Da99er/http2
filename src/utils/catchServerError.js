@@ -1,6 +1,9 @@
-const { UTILS } = global.MY1_GLOBAL;
+const {join} = require('path');
 
-UTILS.catchServerError = ({ req, res }) => (err) => {
+const { PATH_TO_UTILS } = require(join(__dirname, '..', 'globals', 'path-to'));
+const queryObjAddFields = require(join(PATH_TO_UTILS, 'queryObjAddFields'));
+
+const catchServerError = ({ req, res }) => (err) => {
 
     console.err(err); // eslint-disable-line no-console
 
@@ -24,7 +27,7 @@ UTILS.catchServerError = ({ req, res }) => (err) => {
     if (req.advancedOptions && req.advancedOptions.redirectBack) {
 
         res.writeHead(302, {
-            Location: UTILS.queryObjAddFields(req.headers.referer, { errorCode: (req.responceError && req.responceError.errorCode) || 770000 }),
+            Location: queryObjAddFields(req.headers.referer, { errorCode: (req.responceError && req.responceError.errorCode) || 770000 }),
         });
         res.end();
 
@@ -45,3 +48,5 @@ UTILS.catchServerError = ({ req, res }) => (err) => {
     }
 
 };
+
+module.exports = catchServerError;

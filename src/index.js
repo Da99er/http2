@@ -1,9 +1,6 @@
-const { resolve, join } = require('path');
-const { EventEmitter } = require('events');
+const { join } = require('path');
 
-global.ROOTDIR = resolve(__dirname);
-global.MY1_GLOBAL = require(join(global.ROOTDIR, 'globals'));
-global.MY1_GLOBAL.emitter = new EventEmitter();
+global.MY1_GLOBAL = require(join(__dirname, 'globals', 'server'));
 
 // some problem with SSL and HTTPS
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -12,9 +9,9 @@ const {
     PATH_TO_UTILS,
     PATH_TO_WORKS,
     PATH_TO_APIV1,
-} = global.MY1_GLOBAL;
+} = require(join(__dirname, 'globals', 'path-to'));
 
-require(PATH_TO_UTILS);
+require(join(PATH_TO_UTILS, 'colors'));
 require(PATH_TO_WORKS);
 require(PATH_TO_APIV1);
 

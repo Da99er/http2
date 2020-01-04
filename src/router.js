@@ -2,19 +2,21 @@ const url = require('url');
 const { join, extname } = require('path');
 
 const {
-    APIV1,
-    UTILS: {
-        catchServerError,
-        getFile,
-        parse,
-        stringify,
-        findActivePath,
-    },
-    DOMAIN_NAME,
+    PATH_TO_UTILS,
     PATH_TO_MIDDLEWARES,
     PATH_TO_SITE,
     PATH_TO_BUNDLE,
     PATH_TO_CLIENT,
+} = require(join(__dirname, 'globals', 'path-to'));
+
+const catchServerError = require(join(PATH_TO_UTILS, 'catchServerError'));
+const getFile = require(join(PATH_TO_UTILS, 'getFile'));
+const { parse, stringify } = require(join(PATH_TO_UTILS, 'prepareQuery'));
+const findActivePath = require(join(PATH_TO_UTILS, 'findActivePath'));
+
+const {
+    APIV1,
+    DOMAIN_NAME,
     RELOAD_FILES_STORAGE,
 } = global.MY1_GLOBAL;
 
@@ -79,14 +81,13 @@ module.exports = () => (request, response) => {
 
                         if (APIV1[property]) {
 
-                            preloadData[property] = await APIV1[property](
-                                {
-                                    ...graphQueryProperties[property],
-                                    ...params,
-                                }, {
-                                    routerItems,
-                                    cookie: req.headers.cookie,
-                                });
+                            preloadData[property] = await APIV1[property]({
+                                ...graphQueryProperties[property],
+                                ...params,
+                            }, {
+                                routerItems,
+                                cookie: req.headers.cookie,
+                            });
 
                         }
 

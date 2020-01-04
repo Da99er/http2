@@ -1,14 +1,19 @@
-const { UTILS } = global.MY1_GLOBAL;
+const { join } = require('path');
 
-UTILS.redirectBack = function({ req, res, elements }) {
+const { PATH_TO_UTILS } = require(join(__dirname, '..', 'globals', 'path-to'));
+const queryObjAddFields = require(join(PATH_TO_UTILS, 'queryObjAddFields'));
+
+const redirectBack = function({ req, res, elements }) {
 
     return () => {
 
         res.writeHead(302, {
-            Location: UTILS.queryObjAddFields(req.headers.referer, elements || {}),
+            Location: queryObjAddFields(req.headers.referer, elements || {}),
         });
         res.end();
 
     };
 
 };
+
+module.exports = redirectBack;

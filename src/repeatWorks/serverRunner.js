@@ -3,11 +3,12 @@ const { join } = require('path');
 
 const {
     PORT,
-    ROOTDIR,
     DOMAIN_NAME,
     emitter,
     EVENT_SERVER_IS_RUNNING,
 } = global.MY1_GLOBAL;
+
+const { ROOTDIR } = require(join(__dirname, '..', 'globals', 'path-to'));
 
 const serverRouter = require(join(ROOTDIR, 'router'));
 

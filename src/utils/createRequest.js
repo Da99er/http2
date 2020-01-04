@@ -1,8 +1,6 @@
 const https = require('https');
 
-const { UTILS } = global.MY1_GLOBAL;
-
-UTILS.createRequest = function(options, body) {
+const createRequest = function(options, body) {
 
     return new Promise((resolve, reject) => {
 
@@ -52,3 +50,5 @@ UTILS.createRequest = function(options, body) {
     });
 
 };
+
+module.exports = createRequest;

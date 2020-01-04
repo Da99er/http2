@@ -1,9 +1,7 @@
 const querystring = require('querystring');
 const url = require('url');
 
-const { UTILS } = global.MY1_GLOBAL;
-
-UTILS.queryObjAdd = (sitePath, fieldsObj) => {
+const queryObjAdd = (sitePath, fieldsObj) => {
 
     const parsedPathObj = url.parse(sitePath, true);
 
@@ -20,3 +18,5 @@ UTILS.queryObjAdd = (sitePath, fieldsObj) => {
     return newSitePath.join('');
 
 };
+
+module.exports = queryObjAdd;

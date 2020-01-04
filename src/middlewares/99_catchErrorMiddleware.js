@@ -1,8 +1,7 @@
-const {
-    UTILS: {
-        catchServerError,
-    },
-} = global.MY1_GLOBAL;
+const { join } = require('path');
+
+const { PATH_TO_UTILS } = require(join(__dirname, '..', 'globals', 'path-to'));
+const catchServerError = join(PATH_TO_UTILS, 'catchServerError');
 
 module.exports = ({ req, res }, next) => {
 

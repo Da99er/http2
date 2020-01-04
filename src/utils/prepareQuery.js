@@ -1,5 +1,8 @@
-const { UTILS } = global.MY1_GLOBAL;
+const stringify = (obj = {}) => encodeURIComponent(JSON.stringify(obj));
 
-UTILS.stringify = (obj = {}) => encodeURIComponent(JSON.stringify(obj));
+const parse = (str = '%7B%7D') => JSON.parse(decodeURIComponent(str).trim());
 
-UTILS.parse = (str = '%7B%7D') => JSON.parse(decodeURIComponent(str).trim());
+module.exports = {
+    stringify,
+    parse,
+};
