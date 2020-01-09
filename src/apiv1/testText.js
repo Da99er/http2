@@ -1,6 +1,4 @@
-const { APIV1 } = global.MY1_GLOBAL;
-
-APIV1.testText = (params, { routerItems }) => new Promise(((resolve, reject) => {
+const testText = (params, { routerItems }) => new Promise(((resolve, reject) => {
 
     const ans = {
         text: '',
@@ -22,3 +20,5 @@ APIV1.testText = (params, { routerItems }) => new Promise(((resolve, reject) => 
     resolve(ans);
 
 }));
+
+module.exports = testText;

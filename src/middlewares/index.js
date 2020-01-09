@@ -10,9 +10,9 @@ const files = fs.readdirSync(PATH_TO_MIDDLEWARES);
 const middleware = new Middleware();
 
 const runMiddlewareFunctions = files
-    .map((e) => e.match(/\d+_([a-z0-9]+)/i))
-    .filter((e) => e)
-    .map((e) => require(join(PATH_TO_MIDDLEWARES, e[0])));
+    .map((midleware) => midleware.match(/\d+_([a-z0-9]+)/i))
+    .filter((midleware) => midleware)
+    .map((midleware) => require(join(PATH_TO_MIDDLEWARES, midleware[0])));
 
 runMiddlewareFunctions.forEach((midleFunction) => {
 
