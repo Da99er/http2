@@ -11,7 +11,7 @@ files
     .filter((loader) => loader !== 'index.js')
     .forEach((loader) => {
 
-        const loaderName = loader.split('.').slice(0, -1).join('.');
+        const loaderName = loader.split('.')[0];
 
         APIV1[loaderName] = require(join(PATH_TO_APIV1, loader));
 

@@ -1,3 +1,5 @@
+const generateText = require('./generateText');
+
 const testText = (params, { routerItems }) => new Promise(((resolve, reject) => {
 
     const ans = {
@@ -15,7 +17,7 @@ const testText = (params, { routerItems }) => new Promise(((resolve, reject) => 
 
     }
 
-    ans.text = `text:${newString} router:${JSON.stringify(routerItems)} query params:${JSON.stringify(params)} `;
+    ans.text = generateText({ newString, routerItems, params });
 
     resolve(ans);
 
