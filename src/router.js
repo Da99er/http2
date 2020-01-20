@@ -41,11 +41,7 @@ module.exports = () => (request, response) => {
             return ({
                 req,
                 res,
-            }) => {
-
-                req.pipe(res);
-
-            };
+            }) => req.pipe(res);
 
         }
 
@@ -60,20 +56,15 @@ module.exports = () => (request, response) => {
 
                 let graphQueryProperties = {};
 
-                let routerItems = parse(urlParsed.query.items);
-
-                routerItems = routerItems.anything ? {} : routerItems;
-                const params = parse(urlParsed.query.params);
-
                 (async function() {
 
                     if (request.method === 'GET') {
 
-                        graphQueryProperties = parse(urlParsed.query.query);
+                        graphQueryProperties = parse(urlParsed.query.params) || {};
 
                     } else {
 
-                        graphQueryProperties = req.body;
+                        graphQueryProperties = req.body || {};
 
                     }
 
@@ -83,9 +74,6 @@ module.exports = () => (request, response) => {
 
                             preloadData[property] = await APIV1[property]({
                                 ...graphQueryProperties[property],
-                                ...params,
-                            }, {
-                                routerItems,
                                 cookie: req.headers.cookie,
                             });
 
@@ -127,24 +115,30 @@ module.exports = () => (request, response) => {
 
                     const routes = require(PATH_TO_ROUTES).default;
 
+                    const params = parse(urlParsed.query.params) || {};
+                    const activeRoute = findActivePath(routes, urlParsed.pathname);
+                    const graphQueryProperties = parse(activeRoute.preloadDataQuery);
+
                     const preloadData = {};
 
-                    const params = parse(urlParsed.query.params);
-                    const activeRoute = findActivePath(routes, urlParsed.pathname);
-
-                    const graphQueryProperties = parse(activeRoute.preloadDataQuery);
+                    const preloadQuery = {};
 
                     for (const property in graphQueryProperties) {
 
                         if (APIV1[property]) {
 
                             preloadData[property] = await APIV1[property]({
-                                ...graphQueryProperties[property],
                                 ...params,
-                            }, {
-                                routerItems: activeRoute.routerItems,
+                                ...activeRoute.routerItems,
+                                ...graphQueryProperties[property],
                                 cookie: req.headers.cookie,
                             });
+
+                            preloadQuery[property] = {
+                                ...params,
+                                ...activeRoute.routerItems,
+                                ...graphQueryProperties[property],
+                            };
 
                         }
 
@@ -160,10 +154,7 @@ module.exports = () => (request, response) => {
                     const appCreator = require(PATH_TO_SERVER).default;
 
                     responseStream.push(appCreator(preloadData, req.url));
-                    responseStream.push(indexTemplate.END({
-                        preloadDataQuery: activeRoute.preloadDataQuery,
-                        routerItems: stringify(activeRoute.routerItems),
-                    }));
+                    responseStream.push(indexTemplate.END(stringify(preloadQuery)));
                     responseStream.push(null);
                     // When React finishes rendering send the rest of your HTML to the browser
                     responseStream.on('end', () => res.end());
@@ -171,7 +162,7 @@ module.exports = () => (request, response) => {
                     responseStream.on('error', (err) => {
 
                         console.err(err); // eslint-disable-line no-console
-                        res.end(indexTemplate.END(activeRoute.preloadDataQuery));
+                        res.end(indexTemplate.END(stringify(preloadQuery)));
 
                     });
 

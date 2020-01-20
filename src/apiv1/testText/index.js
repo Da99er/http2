@@ -1,15 +1,13 @@
 const generateText = require('./generateText');
 
-const testText = (params, { routerItems }) => new Promise(((resolve, reject) => {
+const testText = (params) => new Promise(((resolve, reject) => {
 
     const ans = {
         text: '',
         error: null,
     };
 
-    const newString = params.text ? params.text : 'emty';
-
-    if (newString && routerItems.test === 'erro') {
+    if (params.test === 'erro') {
 
         ans.error = 'error is bad :(';
 
@@ -17,7 +15,7 @@ const testText = (params, { routerItems }) => new Promise(((resolve, reject) => 
 
     }
 
-    ans.text = generateText({ newString, routerItems, params });
+    ans.text = generateText(params);
 
     resolve(ans);
 
