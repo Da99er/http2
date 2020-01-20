@@ -58,13 +58,13 @@ module.exports = () => (request, response) => {
 
                 (async function() {
 
-                    if (request.method === 'GET') {
+                    if (req.body) {
 
-                        graphQueryProperties = parse(urlParsed.query.params) || {};
+                        graphQueryProperties = req.body;
 
                     } else {
 
-                        graphQueryProperties = req.body || {};
+                        graphQueryProperties = parse(urlParsed.query.params) || {};
 
                     }
 
