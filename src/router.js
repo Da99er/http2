@@ -131,6 +131,7 @@ module.exports = () => (request, response) => {
                                 ...params,
                                 ...activeRoute.routerItems,
                                 ...graphQueryProperties[property],
+                                pathname: urlParsed.pathname,
                                 cookie: req.headers.cookie,
                             });
 
@@ -138,6 +139,7 @@ module.exports = () => (request, response) => {
                                 ...params,
                                 ...activeRoute.routerItems,
                                 ...graphQueryProperties[property],
+                                pathname: urlParsed.pathname,
                             };
 
                         }
