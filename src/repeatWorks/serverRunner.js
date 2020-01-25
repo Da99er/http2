@@ -10,9 +10,9 @@ const {
 
 const { ROOTDIR } = require(join(__dirname, '..', 'globals', 'path-to'));
 
-const serverRouter = require(join(ROOTDIR, 'router'));
+const requestHandler = require(join(ROOTDIR, 'requestHandler'));
 
-http.createServer(serverRouter()).listen(PORT, '127.0.0.1', () => {
+http.createServer(requestHandler()).listen(PORT, '127.0.0.1', () => {
 
     emitter.emit(EVENT_SERVER_IS_RUNNING, new Date());
 

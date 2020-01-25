@@ -4,6 +4,7 @@ const { PATH_TO_UTILS } = require(join(__dirname, '..', 'globals', 'path-to'));
 
 const parseBody = require(join(PATH_TO_UTILS, 'parseBody'));
 
+// eslint-disable-next-line consistent-return
 module.exports = ({ req, res }, next) => {
 
     if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
@@ -15,23 +16,18 @@ module.exports = ({ req, res }, next) => {
                 ...result,
             };
 
-            return next({ req, res });
+            next({ req, res });
 
-        }).catch((err) => {
+        }).catch((error) => {
 
-            console.err(err); // eslint-disable-line no-console
+            req.responceError = error;
 
-            req.responceError = {
-                errorCode: 770041,
-                httpCode: 400,
-            };
-
-            return next({ req, res });
+            next({ req, res });
 
         });
 
     }
 
-    return next({ req, res });
+    next({ req, res });
 
 };
