@@ -35,10 +35,11 @@ const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((reso
             setTimeout((worker) => {
 
                 workerStore.isRamStartClear = false;
-                worker.postMessage({});
+                worker.postMessage({ timeKey: 0, serverFile });
 
-            }, 3000, workerStore.worker);
+            }, 500, workerStore.worker);
             workerStore.worker = workerCreator(emitter);
+            workerStore.worker.postMessage({ serverFile });
 
         }
 

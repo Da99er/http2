@@ -6,7 +6,7 @@ global.window = {
     addEventListener() {}, // eslint-disable-line no-empty-function
 };
 
-parentPort.on('message', ({ timeKey, serverFile, preloadData, url }) => {
+parentPort.on('message', ({ timeKey, serverFile, preloadData = {}, url = '/' }) => {
 
     try {
 
@@ -22,7 +22,7 @@ parentPort.on('message', ({ timeKey, serverFile, preloadData, url }) => {
 
     }
 
-    if (!timeKey) {
+    if (timeKey === 0) {
 
         parentPort.unref();
 
