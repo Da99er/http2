@@ -37,7 +37,7 @@ const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((reso
                 workerStore.isRamStartClear = false;
                 worker.postMessage({ timeKey: 0, serverFile });
 
-            }, 500, workerStore.worker);
+            }, 5000, workerStore.worker);
             workerStore.worker = workerCreator(emitter);
             workerStore.worker.postMessage({ serverFile });
 
