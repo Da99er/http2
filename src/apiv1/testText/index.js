@@ -9,9 +9,7 @@ const testText = (params) => new Promise(((resolve, reject) => {
 
     if (params.test === 'erro') {
 
-        ans.error = 'error is bad :(';
-
-        reject(ans);
+        reject('error is bad :(');
 
     }
 

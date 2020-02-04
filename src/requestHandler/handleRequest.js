@@ -14,6 +14,7 @@ const findActivePath = require(join(PATH_TO_UTILS, 'findActivePath'));
 const catchAsyncError = require(join(PATH_TO_UTILS, 'catchAsyncError'));
 
 const appCreatorWorker = require('./appCreatorWorker');
+const createPreloadData = require('./createPreloadData');
 
 const {
     APIV1,
@@ -35,22 +36,26 @@ async function handleRequest(req, res) {
 
     if (urlParsed.pathname.indexOf('/apiv1/same-graphql') === 0) {
 
-        const preloadData = {};
-
         const graphQueryProperties = (req.body ? req.body : parse(urlParsed.query.params)) || {};
 
-        for (const property in graphQueryProperties) {
+        const keys = Object.keys(graphQueryProperties);
+        const promises = keys.map((property) => {
 
             if (APIV1[property]) {
 
-                preloadData[property] = await APIV1[property]({
+                return APIV1[property]({
                     ...graphQueryProperties[property],
                     cookie: req.headers.cookie,
-                }).catch(catchAsyncError);
+                });
 
             }
 
-        }
+            return Promise.resolve(null);
+
+        });
+
+        const results = await Promise.allSettled(promises).catch(catchAsyncError);
+        const preloadData = createPreloadData(keys, results);
 
         // TODO RESPONSE STATUS CODE
 
@@ -70,21 +75,11 @@ async function handleRequest(req, res) {
         const activeRoute = findActivePath(routes, urlParsed.pathname);
         const graphQueryProperties = parse(activeRoute.preloadDataQuery);
 
-        const preloadData = {};
-
         const preloadQuery = {};
-
-        for (const property in graphQueryProperties) {
+        const keys = Object.keys(graphQueryProperties);
+        const promises = keys.map((property) => {
 
             if (APIV1[property]) {
-
-                preloadData[property] = await APIV1[property]({
-                    ...params,
-                    ...activeRoute.routerItems,
-                    ...graphQueryProperties[property],
-                    pathname: urlParsed.pathname,
-                    cookie: req.headers.cookie,
-                }).catch(catchAsyncError);
 
                 preloadQuery[property] = {
                     ...params,
@@ -93,9 +88,22 @@ async function handleRequest(req, res) {
                     pathname: urlParsed.pathname,
                 };
 
+                return APIV1[property]({
+                    ...params,
+                    ...activeRoute.routerItems,
+                    ...graphQueryProperties[property],
+                    pathname: urlParsed.pathname,
+                    cookie: req.headers.cookie,
+                });
+
             }
 
-        }
+            return Promise.resolve(null);
+
+        });
+
+        const results = await Promise.allSettled(promises).catch(catchAsyncError);
+        const preloadData = createPreloadData(keys, results);
 
         // TODO need build templates
         const indexTemplate = require(join(PATH_TO_CLIENT, 'templates'));
