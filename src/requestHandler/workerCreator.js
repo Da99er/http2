@@ -1,10 +1,10 @@
 const { join } = require('path');
 const { Worker } = require('worker_threads');
 
-const workerCreator = (emitter) => {
+const workerCreator = (emitter, serverFile) => {
 
     const worker = new Worker(join(__dirname, './appCreator.js'), {
-        workerData: null,
+        workerData: serverFile,
     });
 
     worker.on('message', ({ timeKey, result, error }) => {

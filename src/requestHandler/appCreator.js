@@ -1,10 +1,12 @@
-const { parentPort } = require('worker_threads');
+const { parentPort, workerData } = require('worker_threads');
 
 global.window = {
     IS_SERVER: true,
     MODE: process.env.MODE,
     addEventListener() {}, // eslint-disable-line no-empty-function
 };
+
+workerData && require(workerData);
 
 parentPort.on('message', ({ timeKey, serverFile, preloadData = {}, url = '/' }) => {
 

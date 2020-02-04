@@ -9,6 +9,8 @@ const workerStore = {
     isRamStartClear: false,
 };
 
+const sevenSec = 7000;
+
 const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((resolve, reject) => {
 
     const startTimeKey = Date.now();
@@ -37,8 +39,8 @@ const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((reso
                 workerStore.isRamStartClear = false;
                 worker.postMessage({ timeKey: 0, serverFile });
 
-            }, 5000, workerStore.worker);
-            workerStore.worker = workerCreator(emitter);
+            }, sevenSec, workerStore.worker);
+            workerStore.worker = workerCreator(emitter, serverFile);
             workerStore.worker.postMessage({ serverFile });
 
         }
@@ -47,7 +49,7 @@ const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((reso
 
     emitter.addListener(startTimeKey, workerCallback);
 
-    setTimeout(workerTimeOut, 5000, { emitter, startTimeKey, workerCallback, reject });
+    setTimeout(workerTimeOut, sevenSec, { emitter, startTimeKey, workerCallback, reject });
 
 });
 

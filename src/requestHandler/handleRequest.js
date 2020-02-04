@@ -37,17 +37,7 @@ async function handleRequest(req, res) {
 
         const preloadData = {};
 
-        let graphQueryProperties = {};
-
-        if (req.body) {
-
-            graphQueryProperties = req.body;
-
-        } else {
-
-            graphQueryProperties = parse(urlParsed.query.params) || {};
-
-        }
+        const graphQueryProperties = (req.body ? req.body : parse(urlParsed.query.params)) || {};
 
         for (const property in graphQueryProperties) {
 
