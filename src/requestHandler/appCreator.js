@@ -6,13 +6,11 @@ global.window = {
     addEventListener() {}, // eslint-disable-line no-empty-function
 };
 
-workerData && require(workerData);
+const appCreator = require(workerData).default;
 
-parentPort.on('message', ({ timeKey, serverFile, preloadData = {}, url = '/' }) => {
+parentPort.on('message', ({ timeKey, preloadData = {}, url = '/' }) => {
 
     try {
-
-        const appCreator = require(serverFile).default;
 
         const result = appCreator(preloadData, url);
 

@@ -5,7 +5,7 @@ const workerCreator = require('./workerCreator');
 const workerTimeOut = require('./workerTimeOut');
 
 const workerStore = {
-    worker: workerCreator(emitter),
+    worker: null,
     isRamStartClear: false,
 };
 
@@ -15,12 +15,20 @@ const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((reso
 
     const startTimeKey = Date.now();
 
-    workerStore.worker.postMessage({
-        timeKey: startTimeKey,
-        serverFile,
-        preloadData,
-        url,
-    });
+    if (workerStore.worker) {
+
+        workerStore.worker.postMessage({
+            timeKey: startTimeKey,
+            preloadData,
+            url,
+        });
+
+    } else {
+
+        workerStore.worker = workerCreator(emitter, serverFile);
+        resolve(null);
+
+    }
 
     const workerCallback = ({ timeKey, result, error }) => {
 
@@ -37,11 +45,12 @@ const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((reso
             setTimeout((worker) => {
 
                 workerStore.isRamStartClear = false;
-                worker.postMessage({ timeKey: 0, serverFile });
+                worker.postMessage({ timeKey: 0 });
 
             }, sevenSec, workerStore.worker);
+
             workerStore.worker = workerCreator(emitter, serverFile);
-            workerStore.worker.postMessage({ serverFile });
+            workerStore.worker.postMessage({});
 
         }
 
