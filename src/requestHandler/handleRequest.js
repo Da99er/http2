@@ -16,13 +16,13 @@ const catchAsyncError = require(join(PATH_TO_UTILS, 'catchAsyncError'));
 const appCreatorWorker = require('./appCreatorWorker');
 const createPreloadData = require('./createPreloadData');
 
-const {
-    APIV1,
-    RELOAD_FILES_STORAGE,
-} = global.MY1_GLOBAL;
-
 // eslint-disable-next-line func-style
 async function handleRequest(req, res) {
+
+    const {
+        APIV1,
+        RELOAD_FILES_STORAGE,
+    } = global.MY1_GLOBAL;
 
     const urlParsed = url.parse(req.url, true);
 
