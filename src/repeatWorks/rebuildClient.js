@@ -7,6 +7,8 @@ let prevBuildHash = '';
 
 const rebuildClient = () => {
 
+    const {RELOAD_FILES_STORAGE} = global.MY1_GLOBAL;
+
     fs.readdir(PATH_TO_BUNDLE, (errorReadDir, files) => {
 
         if (errorReadDir) {
@@ -18,6 +20,14 @@ const rebuildClient = () => {
         if (files.length && (prevBuildHash !== files.join(''))) {
 
             prevBuildHash = files.join('');
+
+            Object.keys(RELOAD_FILES_STORAGE).forEach((file) => {
+
+                const filePath = join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE[file]);
+
+                delete require.cache[filePath];
+
+            });
 
             const fileMap = {};
 
