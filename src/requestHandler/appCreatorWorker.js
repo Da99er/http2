@@ -35,7 +35,15 @@ const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((reso
         if (startTimeKey === timeKey) {
 
             emitter.removeListener(timeKey, workerCallback);
-            error ? reject(error) : resolve(result);
+
+            if (error) {
+
+                workerStore.worker = null;
+                reject(error);
+
+            }
+
+            resolve(result);
 
         }
 
