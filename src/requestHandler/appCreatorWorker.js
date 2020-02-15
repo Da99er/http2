@@ -15,7 +15,7 @@ const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((reso
 
     const startTimeKey = Date.now();
 
-    if (workerStore.worker) {
+    if (workerStore.worker && workerStore.worker.threadId > 0) {
 
         workerStore.worker.postMessage({
             timeKey: startTimeKey,
@@ -32,16 +32,17 @@ const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((reso
 
     const workerCallback = ({ timeKey, result, error }) => {
 
+        if (error) {
+
+            workerStore.worker = null;
+            workerStore.isRamStartClear = false;
+            reject(error);
+
+        }
+
         if (startTimeKey === timeKey) {
 
             emitter.removeListener(timeKey, workerCallback);
-
-            if (error) {
-
-                workerStore.worker = null;
-                reject(error);
-
-            }
 
             resolve(result);
 

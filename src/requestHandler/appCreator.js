@@ -19,6 +19,7 @@ parentPort.on('message', ({ timeKey, preloadData = {}, url = '/' }) => {
     } catch (error) {
 
         parentPort.postMessage({ timeKey, error });
+        parentPort.unref();
 
     }
 
