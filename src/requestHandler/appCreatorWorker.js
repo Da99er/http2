@@ -34,8 +34,6 @@ const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((reso
 
         if (error) {
 
-            workerStore.worker = null;
-            workerStore.isRamStartClear = false;
             reject(error);
 
         }
