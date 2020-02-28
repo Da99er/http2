@@ -6,7 +6,7 @@ const {
     PATH_TO_SITE,
     PATH_TO_BUNDLE,
     PATH_TO_CLIENT,
-} = require(join(__dirname, '..', 'globals', 'path-to'));
+} = require(join(__dirname, '..', 'globals', 'pathTo'));
 
 const getFile = require(join(PATH_TO_UTILS, 'getFile'));
 const { parse, stringify } = require(join(PATH_TO_UTILS, 'prepareQuery'));

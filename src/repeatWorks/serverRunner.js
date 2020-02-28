@@ -8,7 +8,7 @@ const {
     EVENT_SERVER_IS_RUNNING,
 } = global.MY1_GLOBAL;
 
-const { ROOTDIR } = require(join(__dirname, '..', 'globals', 'path-to'));
+const { ROOTDIR } = require(join(__dirname, '..', 'globals', 'pathTo'));
 
 const requestHandler = require(join(ROOTDIR, 'requestHandler'));
 

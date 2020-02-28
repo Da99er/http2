@@ -1,7 +1,7 @@
 const { join } = require('path');
 const fs = require('fs');
 
-const { PATH_TO_BUNDLE } = require(join(__dirname, '..', 'globals', 'path-to'));
+const { PATH_TO_BUNDLE } = require(join(__dirname, '..', 'globals', 'pathTo'));
 
 let prevBuildHash = '';
 

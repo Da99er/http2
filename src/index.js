@@ -9,7 +9,7 @@ const {
     PATH_TO_UTILS,
     PATH_TO_WORKS,
     PATH_TO_APIV1,
-} = require(join(__dirname, 'globals', 'path-to'));
+} = require(join(__dirname, 'globals', 'pathTo'));
 
 require(join(PATH_TO_UTILS, 'colors'));
 require(PATH_TO_WORKS);

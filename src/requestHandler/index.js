@@ -2,7 +2,7 @@ const { join } = require('path');
 
 const {
     PATH_TO_MIDDLEWARES,
-} = require(join(__dirname, '..', 'globals', 'path-to'));
+} = require(join(__dirname, '..', 'globals', 'pathTo'));
 
 const handleRequest = require('./handleRequest');
 

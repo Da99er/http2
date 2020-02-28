@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { join } = require('path');
 
-const { PATH_TO_APIV1 } = require(join(__dirname, '..', 'globals', 'path-to'));
+const { PATH_TO_APIV1 } = require(join(__dirname, '..', 'globals', 'pathTo'));
 
 const { APIV1 } = global.MY1_GLOBAL;
 

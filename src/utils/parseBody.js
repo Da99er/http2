@@ -1,5 +1,5 @@
 const formidable = require('formidable');
-const { PATH_TO_SITE } = require('../globals/path-to');
+const { PATH_TO_SITE } = require('../globals/pathTo');
 
 const parseBody = (req, res) => new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
 

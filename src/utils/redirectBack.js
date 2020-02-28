@@ -1,6 +1,6 @@
 const { join } = require('path');
 
-const { PATH_TO_UTILS } = require(join(__dirname, '..', 'globals', 'path-to'));
+const { PATH_TO_UTILS } = require(join(__dirname, '..', 'globals', 'pathTo'));
 const queryObjAddFields = require(join(PATH_TO_UTILS, 'queryObjAddFields'));
 
 const redirectBack = function({ req, res, elements }) {

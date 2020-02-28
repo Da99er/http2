@@ -1,7 +1,7 @@
 const { join } = require('path');
-const { match } = require('path-to-regexp');
+const { match } = require('pathTo-regexp');
 
-const { PATH_TO_UTILS } = require(join(__dirname, '..', 'globals', 'path-to'));
+const { PATH_TO_UTILS } = require(join(__dirname, '..', 'globals', 'pathTo'));
 const { stringify } = require(join(PATH_TO_UTILS, 'prepareQuery'));
 
 const chekerOptions = { decode: decodeURIComponent };

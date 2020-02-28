@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { join } = require('path');
 
-const { PATH_TO_WORKS } = require(join(__dirname, '..', 'globals', 'path-to'));
+const { PATH_TO_WORKS } = require(join(__dirname, '..', 'globals', 'pathTo'));
 
 const files = fs.readdirSync(PATH_TO_WORKS);
 
