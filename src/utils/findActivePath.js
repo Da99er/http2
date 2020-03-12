@@ -1,5 +1,5 @@
 const { join } = require('path');
-const { match } = require('pathTo-regexp');
+const { match } = require('path-to-regexp');
 
 const { PATH_TO_UTILS } = require(join(__dirname, '..', 'globals', 'pathTo'));
 const { stringify } = require(join(PATH_TO_UTILS, 'prepareQuery'));
