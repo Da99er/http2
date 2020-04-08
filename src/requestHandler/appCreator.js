@@ -12,7 +12,7 @@ parentPort.on('message', ({ timeKey, preloadData = {}, url = '/' }) => {
 
     try {
 
-        const result = appCreator(preloadData, url);
+        const result = timeKey ? appCreator(preloadData, url) : null;
 
         parentPort.postMessage({ timeKey, result });
 
