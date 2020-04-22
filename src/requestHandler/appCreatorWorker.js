@@ -2,7 +2,6 @@ const EventEmitter = require('events');
 const emitter = new EventEmitter();
 
 const workerCreator = require('./workerCreator');
-const workerTimeOut = require('./workerTimeOut');
 
 const workerStore = {
     worker: null,
@@ -46,26 +45,23 @@ const appCreatorWorker = ({ serverFile, preloadData, url }) => new Promise((reso
 
         }
 
-        if (workerStore.isRamStartClear === false) {
-
-            workerStore.isRamStartClear = true;
-            setTimeout((worker) => {
-
-                workerStore.isRamStartClear = false;
-                worker.postMessage({ timeKey: 0 });
-
-            }, sevenSec, workerStore.worker);
-
-            workerStore.worker = workerCreator(emitter, serverFile);
-            workerStore.worker.postMessage({});
-
-        }
-
     };
 
-    emitter.addListener(startTimeKey, workerCallback);
+    if (workerStore.isRamStartClear === false) {
 
-    setTimeout(workerTimeOut, sevenSec, { emitter, startTimeKey, workerCallback, reject });
+        workerStore.isRamStartClear = true;
+        setTimeout((worker) => {
+
+            workerStore.isRamStartClear = false;
+            worker.postMessage({ timeKey: 0 });
+
+        }, sevenSec, workerStore.worker);
+
+        workerStore.worker = workerCreator(emitter, serverFile);
+
+    }
+
+    emitter.addListener(startTimeKey, workerCallback);
 
 });
 

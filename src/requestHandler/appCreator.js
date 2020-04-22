@@ -10,6 +10,12 @@ const appCreator = require(workerData).default;
 
 parentPort.on('message', ({ timeKey, preloadData = {}, url = '/' }) => {
 
+    if (timeKey === 0) {
+
+        parentPort.unref();
+
+    }
+
     try {
 
         const result = timeKey ? appCreator(preloadData, url) : null;
@@ -19,12 +25,6 @@ parentPort.on('message', ({ timeKey, preloadData = {}, url = '/' }) => {
     } catch (error) {
 
         parentPort.postMessage({ timeKey, error });
-        parentPort.unref();
-
-    }
-
-    if (timeKey === 0) {
-
         parentPort.unref();
 
     }
