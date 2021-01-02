@@ -1,6 +1,6 @@
 const https = require('https');
 
-const createRequest = function(options, body) {
+function createRequest(options, body) {
 
     return new Promise((resolve, reject) => {
 
@@ -45,10 +45,11 @@ const createRequest = function(options, body) {
             reject({ errorCode: 770044, errorBody: err, ...options });
 
         });
+
         deliverRequest.end(body);
 
     });
 
-};
+}
 
 module.exports = createRequest;

@@ -6,20 +6,27 @@ const { stringify } = require(join(PATH_TO_UTILS, 'prepareQuery'));
 
 const chekerOptions = { decode: decodeURIComponent };
 
-const findActivePath = (routes = [], url = '') => {
+function findActivePath(routes = [], url = '/') {
 
     const defaultRoute = {
         preloadDataQuery: stringify({}),
-        routerItems: stringify({}),
     };
 
+    let foundParams = {};
+
     const foundedRoute = routes.find(({ path }) => {
+
+        if (path === '*') {
+
+            return true;
+
+        }
 
         const chekedUrl = match(path, chekerOptions)(url);
 
         if (chekedUrl) {
 
-            defaultRoute.routerItems = chekedUrl.params;
+            foundParams = chekedUrl.params;
 
         }
 
@@ -31,13 +38,16 @@ const findActivePath = (routes = [], url = '') => {
 
         return {
             ...foundedRoute,
-            routerItems: foundedRoute.path === '/:anything*' ? {} : defaultRoute.routerItems,
+            routerItems: foundParams,
         };
 
     }
 
-    return defaultRoute;
+    return {
+        ...defaultRoute,
+        routerItems: foundParams,
+    };
 
-};
+}
 
 module.exports = findActivePath;

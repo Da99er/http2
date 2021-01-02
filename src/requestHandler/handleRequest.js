@@ -4,27 +4,36 @@ const { join, extname } = require('path');
 const {
     PATH_TO_UTILS,
     PATH_TO_SITE,
-    PATH_TO_BUNDLE,
-    PATH_TO_CLIENT,
 } = require(join(__dirname, '..', 'globals', 'pathTo'));
 
+const {
+    DOMAIN_NAME,
+    PORT,
+} = require(join(__dirname, '..', 'globals', 'server'));
+
 const getFile = require(join(PATH_TO_UTILS, 'getFile'));
-const { parse, stringify } = require(join(PATH_TO_UTILS, 'prepareQuery'));
+const { parse } = require(join(PATH_TO_UTILS, 'prepareQuery'));
 const findActivePath = require(join(PATH_TO_UTILS, 'findActivePath'));
 const catchAsyncError = require(join(PATH_TO_UTILS, 'catchAsyncError'));
 
-const appCreatorWorker = require('./appCreatorWorker');
 const createPreloadData = require('./createPreloadData');
+const appCreatorWorker = require('./appCreatorWorker');
+const { getCachedData, setCachedPage } = require('./getCachedData');
 
-// eslint-disable-next-line func-style
 async function handleRequest(req, res) {
+
+    if (req.headers.host !== `localhost:${PORT}` && req.headers.host.includes(DOMAIN_NAME) === false) {
+
+        return res.end(null);
+
+    }
 
     const {
         APIV1,
         RELOAD_FILES_STORAGE,
     } = global.MY1_GLOBAL;
 
-    const urlParsed = url.parse(req.url, true);
+    const urlParsed = req.urlParsed = url.parse(req.url, true);
 
     if (extname(urlParsed.pathname).length) {
 
@@ -36,62 +45,74 @@ async function handleRequest(req, res) {
 
     if (urlParsed.pathname.indexOf('/apiv1/same-graphql') === 0) {
 
-        const graphQueryProperties = (req.body ? req.body : parse(urlParsed.query.params)) || {};
+        res.setHeader('Content-Type', 'application/json; charset=UTF-8');
 
-        const keys = Object.keys(graphQueryProperties);
-        const promises = keys.map((property) => {
+        const queryObj = req.body || urlParsed.query;
+        const queryKeys = Object.keys(queryObj);
+        const promises = queryKeys.map((property) => {
 
             if (APIV1[property]) {
 
                 return APIV1[property]({
-                    ...graphQueryProperties[property],
+                    ...parse(queryObj[property]),
                     cookie: req.headers.cookie,
                 });
 
             }
 
-            return Promise.resolve(null);
+            return null;
 
         });
 
-        const results = await Promise.allSettled(promises).catch(catchAsyncError);
-        const preloadData = createPreloadData(keys, results);
+        const results = await Promise.allSettled(promises);
 
-        // TODO RESPONSE STATUS CODE
+        const preloadData = createPreloadData(results, queryKeys);
+        const fullPreloadData = {
+            ...preloadData,
+        };
 
-        res.setHeader('Content-Type', 'application/json');
-        return res.end(JSON.stringify(preloadData));
+        return res.end(JSON.stringify(fullPreloadData));
 
     }
 
     if (req.method === 'GET') {
 
-        const PATH_TO_SERVER = join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE['server.js']);
-        const PATH_TO_ROUTES = join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE['routes.js']);
+        res.setHeader('Content-Type', 'text/html; charset=UTF-8');
+
+        const oldCacheData = getCachedData(req);
+
+        if (oldCacheData) {
+
+            res.statusCode = oldCacheData.statusCode;
+            res.end(oldCacheData.appHtml);
+
+        }
+
+        const PATH_TO_SERVER = RELOAD_FILES_STORAGE['server.js'];
+        const PATH_TO_ROUTES = RELOAD_FILES_STORAGE['routes.js'];
 
         const routes = require(PATH_TO_ROUTES).default;
 
-        const params = parse(urlParsed.query.params) || {};
-        const activeRoute = findActivePath(routes, urlParsed.pathname);
-        const graphQueryProperties = parse(activeRoute.preloadDataQuery);
-
         const preloadQuery = {};
-        const keys = Object.keys(graphQueryProperties);
-        const promises = keys.map((property) => {
+        const activeRoute = findActivePath(routes, urlParsed.pathname);
+        const queryObj = parse(activeRoute.preloadDataQuery);
+        const queryKeys = Object.keys(queryObj);
+
+        const promises = queryKeys.map((property) => {
 
             if (APIV1[property]) {
 
                 preloadQuery[property] = {
-                    ...params,
+                    ...urlParsed.query,
+                    ...queryObj[property],
                     ...activeRoute.routerItems,
-                    ...graphQueryProperties[property],
                     pathname: urlParsed.pathname,
                 };
 
                 return APIV1[property]({
-                    ...params,
+                    ...urlParsed.query,
+                    ...queryObj[property],
                     ...activeRoute.routerItems,
-                    ...graphQueryProperties[property],
                     pathname: urlParsed.pathname,
                     cookie: req.headers.cookie,
                 });
@@ -102,24 +123,36 @@ async function handleRequest(req, res) {
 
         });
 
-        const results = await Promise.allSettled(promises).catch(catchAsyncError);
-        const preloadData = createPreloadData(keys, results);
+        const results = await Promise.allSettled(promises);
 
-        // TODO need build templates
-        const indexTemplate = require(join(PATH_TO_CLIENT, 'templates'));
+        const preloadData = createPreloadData(results, queryKeys);
+        const fullPreloadData = {
+            ...preloadData,
+        };
 
-        res.write(indexTemplate.START());
-
-        const appHtml = await appCreatorWorker({
+        const serverAnswer = await appCreatorWorker({
             serverFile: PATH_TO_SERVER,
-            preloadData,
-            url: req.url,
-        }).catch(catchAsyncError);
+            fileStorage: RELOAD_FILES_STORAGE,
+            preloadData: fullPreloadData,
+            preloadQuery,
+            location: urlParsed,
+        }).catch(catchAsyncError) || {};
 
-        res.write(appHtml || '');
+        const newCache = {
+            statusCode: serverAnswer.statusCode || 200,
+            appHtml: serverAnswer.appHtml,
+        };
 
-        res.write(indexTemplate.END(stringify(preloadQuery)));
-        res.end();
+        setCachedPage(req, newCache);
+
+        if (res.writableFinished === false) {
+
+            res.statusCode = newCache.statusCode;
+            res.end(newCache.appHtml);
+
+        }
+
+        return null;
 
     }
 

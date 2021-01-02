@@ -1,22 +1,27 @@
 const generateText = require('./generateText');
 
-const testText = (params) => new Promise(((resolve, reject) => {
+function testText(params) {
 
-    const ans = {
-        text: '',
-        error: null,
-    };
+    return new Promise(((resolve, reject) => {
 
-    if (params.test === 'erro') {
+        const ans = {
+            key: 'testText',
+            text: '',
+            error: null,
+        };
 
-        reject('error is bad :(');
+        if (params.test === 'erro') {
 
-    }
+            reject('error is bad :(');
 
-    ans.text = generateText(params);
+        }
 
-    resolve(ans);
+        ans.text = generateText(params);
 
-}));
+        resolve(ans);
+
+    }));
+
+}
 
 module.exports = testText;

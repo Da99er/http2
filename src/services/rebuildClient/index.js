@@ -1,13 +1,17 @@
 const { join } = require('path');
 const fs = require('fs');
 
-const { PATH_TO_BUNDLE } = require(join(__dirname, '..', 'globals', 'pathTo'));
+const { PATH_TO_BUNDLE } = require(join(__dirname, '..', '..', 'globals', 'pathTo'));
+const { FILE_STORAGE_RELOADED } = require(join(__dirname, '..', '..', 'globals', 'events'));
 
 let prevBuildHash = '';
 
-const rebuildClient = () => {
+function rebuildClient() {
 
-    const {RELOAD_FILES_STORAGE} = global.MY1_GLOBAL;
+    const {
+        RELOAD_FILES_STORAGE,
+        emitter,
+    } = global.MY1_GLOBAL;
 
     fs.readdir(PATH_TO_BUNDLE, (errorReadDir, files) => {
 
@@ -21,11 +25,9 @@ const rebuildClient = () => {
 
             prevBuildHash = files.join('');
 
-            Object.keys(RELOAD_FILES_STORAGE).forEach((file) => {
+            Object.values(RELOAD_FILES_STORAGE).forEach((file) => {
 
-                const filePath = join(PATH_TO_BUNDLE, RELOAD_FILES_STORAGE[file]);
-
-                delete require.cache[filePath];
+                delete require.cache[file];
 
             });
 
@@ -35,17 +37,19 @@ const rebuildClient = () => {
 
                 const fileKey = file.split('.').slice(-2).join('.');
 
-                fileMap[fileKey] = file;
+                fileMap[fileKey] = join(PATH_TO_BUNDLE, file);
 
             });
 
             global.MY1_GLOBAL.RELOAD_FILES_STORAGE = fileMap;
 
+            emitter.emit(FILE_STORAGE_RELOADED, fileMap);
+
         }
 
     });
 
-};
+}
 
 rebuildClient();
 

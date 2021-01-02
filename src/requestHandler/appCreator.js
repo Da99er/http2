@@ -1,14 +1,14 @@
 const { parentPort, workerData } = require('worker_threads');
 
-global.window = {
-    IS_SERVER: true,
-    MODE: process.env.MODE,
-    addEventListener() {}, // eslint-disable-line no-empty-function
-};
-
 const appCreator = require(workerData).default;
 
-parentPort.on('message', ({ timeKey, preloadData = {}, url = '/' }) => {
+parentPort.on('message', ({
+    timeKey,
+    fileStorage,
+    preloadData,
+    preloadQuery,
+    location = {},
+}) => {
 
     if (timeKey === 0) {
 
@@ -18,7 +18,12 @@ parentPort.on('message', ({ timeKey, preloadData = {}, url = '/' }) => {
 
     try {
 
-        const result = timeKey ? appCreator(preloadData, url) : null;
+        const result = timeKey ? appCreator({
+            fileStorage,
+            preloadData,
+            preloadQuery,
+            location,
+        }) : null;
 
         parentPort.postMessage({ timeKey, result });
 

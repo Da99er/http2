@@ -8,10 +8,7 @@ const handleRequest = require('./handleRequest');
 
 const middlewares = require(PATH_TO_MIDDLEWARES);
 
-const callback = ({
-    req,
-    res,
-}) => {
+function callback({ req, res }) {
 
     if (req.responceError) {
 
@@ -22,7 +19,7 @@ const callback = ({
 
     }
 
-    handleRequest(req, res)
+    return handleRequest(req, res)
         .catch((error) => {
 
             res.statusCode = 503;
@@ -31,13 +28,15 @@ const callback = ({
 
         });
 
-};
+}
 
-module.exports = () => (req, res) => {
+function handler(req, res) {
 
     middlewares.init({
         req,
         res,
     }, callback);
 
-};
+}
+
+module.exports = handler;

@@ -9,7 +9,7 @@ module.exports = ({ req, res }, next) => {
 
     if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
 
-        return parseBody(req, req).then((result) => {
+        return parseBody(req).then((result) => {
 
             req.body = {
                 ...req.body,

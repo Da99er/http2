@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "lint": "eslint --fix . && stylelint **/*.scss",
+        "lint": "eslint --fix .",
         "test": "echo \"no tests\"",
         "start": "MODE=development DOMAIN_NAME='my-own-site.cot' node ./src/index.js",
         "prod": "MODE=production DOMAIN_NAME='my-own-site.cot' node ./src/index.js"
@@ -14,11 +14,7 @@
             "eslint --fix",
             "git add"
         ],
-        "**/*.scss": [
-            "stylelint",
-            "git add"
-        ],
-        "**/*.{json,scss}": [
+        "**/*.{json}": [
             "prettier --write",
             "git add"
         ]
@@ -33,29 +29,23 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@babel/preset-env": "^7.11.0",
         "babel-eslint": "^10.1.0",
-        "eslint": "^6.8.0",
-        "eslint-plugin-babel": "^5.3.0",
-        "eslint-plugin-jest": "^23.8.2",
-        "eslint-plugin-react": "^7.19.0",
-        "eslint-watch": "^6.0.1",
-        "file-loader": "^6.0.0",
-        "husky": "^4.2.3",
-        "lint-staged": "^10.0.8",
-        "npm-check-updates": "^4.0.4",
-        "prettier": "^2.0.1"
+        "eslint": "^7.7.0",
+        "eslint-plugin-babel": "^5.3.1",
+        "eslint-plugin-jest": "^23.20.0",
+        "husky": "^4.2.5",
+        "lint-staged": "^10.2.13",
+        "npm-check-updates": "^8.0.2",
+        "prettier": "^2.1.1"
     },
     "dependencies": {
+        "cyrillic-to-translit-js": "^3.1.0",
         "formidable": "^1.2.2",
-        "jsonwebtoken": "^8.5.1",
-        "mongoose": "^5.9.5",
-        "multiparty": "^4.2.1",
         "mysql2": "^2.1.0",
-        "passport": "^0.4.1",
-        "passport-custom": "^1.1.1",
-        "passport-local": "^1.0.0",
         "path-to-regexp": "^6.1.0",
-        "php-serialize": "^3.0.1",
-        "validator": "^13.0.0"
+        "php-serialize": "^4.0.2",
+        "querystring": "^0.2.0",
+        "validator": "^13.1.1"
     }
 }
